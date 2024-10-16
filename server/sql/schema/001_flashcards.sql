@@ -1,8 +1,9 @@
 -- +goose Up
 CREATE TABLE flashcards(
-    id      UUID,
-    front   varchar(255),
-    back    varchar(255) 
+    id      UUID NOT NULL,
+    front   text NOT NULL,
+    back    text NOT NULL,
+    PRIMARY KEY(id)
 );
 
 -- +goose Down

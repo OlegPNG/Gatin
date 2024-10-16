@@ -7,7 +7,6 @@ package database
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/google/uuid"
 )
@@ -23,9 +22,9 @@ RETURNING id, front, back
 `
 
 type CreateFlashcardParams struct {
-	ID    uuid.NullUUID
-	Front sql.NullString
-	Back  sql.NullString
+	ID    uuid.UUID `json:"id"`
+	Front string    `json:"front"`
+	Back  string    `json:"back"`
 }
 
 func (q *Queries) CreateFlashcard(ctx context.Context, arg CreateFlashcardParams) (Flashcard, error) {

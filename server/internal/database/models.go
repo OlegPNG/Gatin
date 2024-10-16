@@ -5,13 +5,11 @@
 package database
 
 import (
-	"database/sql"
-
 	"github.com/google/uuid"
 )
 
 type Flashcard struct {
-	ID    uuid.NullUUID
-	Front sql.NullString
-	Back  sql.NullString
+	ID    uuid.UUID `json:"id"`
+	Front string    `json:"front"`
+	Back  string    `json:"back"`
 }
