@@ -44,6 +44,8 @@ func main() {
 
     dbURL := os.Getenv("PSQL_URL")
 
+    port := os.Getenv("GATIN_PORT")
+
     db, err := sql.Open("postgres", dbURL)
     if err != nil {
 	log.Fatalf("Error connecting to database: %v", err)
@@ -61,8 +63,8 @@ func main() {
 
     state.setupHandlers()
 
-    log.Print("Server listening on http:/localhost:3010")
-    if err := http.ListenAndServe("0.0.0.0:3010", r); err != nil {
+    log.Print("Server listening on http:/localhost:" + port)
+    if err := http.ListenAndServe("0.0.0.0:" + port, r); err != nil {
 	log.Fatalf("There was an error with the http server: %v", err)
     }
 }
