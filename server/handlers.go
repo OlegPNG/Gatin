@@ -37,7 +37,7 @@ func(s *State) setupHandlers() {
 	    log.Printf("Error reading request body: %v", err)
 	    return
 	}
-	body := Flashcard{}
+	body := database.Flashcard{}
 
 	err = json.Unmarshal(raw, &body)
 	if err != nil {

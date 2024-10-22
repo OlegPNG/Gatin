@@ -9,7 +9,8 @@ import (
 )
 
 type Flashcard struct {
-	ID    uuid.UUID `json:"id"`
-	Front string    `json:"front"`
-	Back  string    `json:"back"`
+	ID    uuid.UUID     `json:"id"`
+	Front string        `json:"front"`
+	Back  string        `json:"back"`
+	SetID uuid.NullUUID `json:"set_id"`
 }

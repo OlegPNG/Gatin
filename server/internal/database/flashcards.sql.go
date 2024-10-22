@@ -18,7 +18,7 @@ VALUES (
     $2,
     $3
 )
-RETURNING id, front, back
+RETURNING id, front, back, set_id
 `
 
 type CreateFlashcardParams struct {
@@ -30,12 +30,17 @@ type CreateFlashcardParams struct {
 func (q *Queries) CreateFlashcard(ctx context.Context, arg CreateFlashcardParams) (Flashcard, error) {
 	row := q.db.QueryRowContext(ctx, createFlashcard, arg.ID, arg.Front, arg.Back)
 	var i Flashcard
-	err := row.Scan(&i.ID, &i.Front, &i.Back)
+	err := row.Scan(
+		&i.ID,
+		&i.Front,
+		&i.Back,
+		&i.SetID,
+	)
 	return i, err
 }
 
 const getAllFlashcards = `-- name: GetAllFlashcards :many
-SELECT id, front, back FROM flashcards
+SELECT id, front, back, set_id FROM flashcards
 `
 
 func (q *Queries) GetAllFlashcards(ctx context.Context) ([]Flashcard, error) {
@@ -47,7 +52,12 @@ func (q *Queries) GetAllFlashcards(ctx context.Context) ([]Flashcard, error) {
 	var items []Flashcard
 	for rows.Next() {
 		var i Flashcard
-		if err := rows.Scan(&i.ID, &i.Front, &i.Back); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.Front,
+			&i.Back,
+			&i.SetID,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
