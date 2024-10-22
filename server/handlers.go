@@ -118,9 +118,16 @@ func (s *State) setupHandlers() {
 			log.Println("Error marshalling chatpgt responses")
 		}
 
+		data, err := json.Marshal(flashcards)
+		if err != nil {
+			log.Printf("Failed to marshal JSON response: %v", flashcards)
+			w.WriteHeader(500)
+			return
+		}
+
 		w.Header().Add("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(flashcards))
+		w.Write(data)
 	})
 
 }
