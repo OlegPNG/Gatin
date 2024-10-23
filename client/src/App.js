@@ -5,7 +5,6 @@ import TopBar from './components/TopBar';
 import Flashcard from './components/Flashcard';
 import LoginForm from './components/LoginForm';
 import './App.css';
-import Flashcard from './Flashcard';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
