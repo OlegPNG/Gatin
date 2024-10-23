@@ -1,7 +1,7 @@
 import React from 'react';
 import './TopBar.css';
 
-const TopBar = ({ isAuthenticated, onLogout, onLoginClick }) => {
+const TopBar = ({ isAuthenticated, onLoginClick, onLogout }) => {
   return (
     <div className="top-bar">
       <div className="menu-selection">Menu Selection</div>
