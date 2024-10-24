@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+
 	//"github.com/google/uuid"
 	"github.com/joho/godotenv"
 
@@ -21,51 +22,50 @@ import (
 )
 
 type State struct {
-    Db *database.Queries
-    R *chi.Mux
+	Db *database.Queries
+	R  *chi.Mux
 }
 
-type Flashcard struct {
-    Id	    *int
-    Front   string
-    Back    string
+type Flashcardz struct {
+	Id    *int
+	Front string
+	Back  string
 }
 
 type FlashcardMsg struct {
-    Flashcards []Flashcard
+	Flashcards []Flashcard
 }
 
 func main() {
-    if err := godotenv.Load(); err != nil {
-	log.Fatalf("Error loading the .env file: %v", err)
-    }
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading the .env file: %v", err)
+	}
 
-    state := State{}
+	state := State{}
 
-    dbURL := os.Getenv("PSQL_URL")
+	dbURL := os.Getenv("PSQL_URL")
 
-    port := os.Getenv("GATIN_PORT")
+	port := os.Getenv("GATIN_PORT")
 
-    db, err := sql.Open("postgres", dbURL)
-    if err != nil {
-	log.Fatalf("Error connecting to database: %v", err)
-    }
+	db, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		log.Fatalf("Error connecting to database: %v", err)
+	}
 
-    dbQueries := database.New(db)
+	dbQueries := database.New(db)
 
-    state.Db = dbQueries
+	state.Db = dbQueries
 
-    r := chi.NewRouter()
+	r := chi.NewRouter()
 
-    r.Use(middleware.Logger)
+	r.Use(middleware.Logger)
 
-    state.R = r
+	state.R = r
 
-    state.setupHandlers()
+	state.setupHandlers()
 
-    log.Print("Server listening on http:/localhost:" + port)
-    if err := http.ListenAndServe("0.0.0.0:" + port, r); err != nil {
-	log.Fatalf("There was an error with the http server: %v", err)
-    }
+	log.Print("Server listening on http:/localhost:" + port)
+	if err := http.ListenAndServe("0.0.0.0:"+port, r); err != nil {
+		log.Fatalf("There was an error with the http server: %v", err)
+	}
 }
-
