@@ -3,6 +3,7 @@ package main
 import (
 	//"context"
 	"database/sql"
+	"time"
 	//"encoding/json"
 	//"io"
 	"log"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+
 	//"github.com/google/uuid"
 	"github.com/joho/godotenv"
 
@@ -20,9 +22,19 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type session struct {
+    email   string
+    expiry  time.Time
+}
+
+func(s session) isExpired() bool {
+    return s.expiry.Before(time.Now())
+}
+
 type State struct {
     Db *database.Queries
     R *chi.Mux
+    sessions map[string]session
 }
 
 type Flashcard struct {
@@ -41,6 +53,8 @@ func main() {
     }
 
     state := State{}
+
+    state.sessions = map[string]session{}
 
     dbURL := os.Getenv("PSQL_URL")
 
