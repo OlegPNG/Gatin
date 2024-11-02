@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"io"
+	//"io"
 	"log"
 	"net/http"
 	"time"
@@ -21,9 +21,10 @@ type Credentials struct {
 }
 
 func(s *State) setupHandlers() {
-    s.R.Post("/api/flashcard", s.TestFlashcardPostHandler)
+    //s.R.Post("/api/flashcard", s.TestFlashcardPostHandler)
 
     s.R.Get("/api/flashcard", s.TestFlashcardGetHandler)
+    s.R.Post("/api/testset", s.CreateTestSetHandler)
 
     s.R.Post("/api/register", s.RegisterHandler)
     s.R.Post("/api/signin", s.SigninHandler)
@@ -33,7 +34,7 @@ func(s *State) setupHandlers() {
     s.R.Get("/api/welcome", s.WelcomeHandler)
 }
 
-func(s *State) TestFlashcardPostHandler(w http.ResponseWriter, req *http.Request) {
+/*func(s *State) TestFlashcardPostHandler(w http.ResponseWriter, req *http.Request) {
 	raw, err := io.ReadAll(req.Body)
 	if err != nil {
 	    log.Printf("Error reading request body: %v", err)
@@ -58,6 +59,26 @@ func(s *State) TestFlashcardPostHandler(w http.ResponseWriter, req *http.Request
 	}
 
 	w.WriteHeader(http.StatusOK)
+}*/
+
+func(s *State) CreateTestSetHandler(w http.ResponseWriter, req *http.Request) {
+    name := "Test Set"
+    description := "This is a test set not meant to be accessed."
+
+    _, err := s.Db.CreateSet(
+	context.Background(),
+	database.CreateSetParams{
+	    ID: uuid.New(),
+	    Title: name,
+	    Description: description,
+	    Email: "admin@gatin.dev",
+	},
+    )
+
+    if err != nil {
+	log.Println("Db.CreateSet error: " + err.Error())
+    }
+
 }
 
 func(s *State) TestFlashcardGetHandler(w http.ResponseWriter, req *http.Request) {

@@ -12,30 +12,42 @@ import (
 )
 
 const createFlashcard = `-- name: CreateFlashcard :one
-INSERT INTO flashcards (id, front, back)
+INSERT INTO flashcards (id, set_id, front, back)
 VALUES (
     $1,
     $2,
-    $3
+    $3,
+    $4
 )
-RETURNING id, front, back
+RETURNING set_id, id, front, back
 `
 
 type CreateFlashcardParams struct {
-	ID    uuid.UUID `json:"id"`
+	ID    int32     `json:"id"`
+	SetID uuid.UUID `json:"set_id"`
 	Front string    `json:"front"`
 	Back  string    `json:"back"`
 }
 
 func (q *Queries) CreateFlashcard(ctx context.Context, arg CreateFlashcardParams) (Flashcard, error) {
-	row := q.db.QueryRowContext(ctx, createFlashcard, arg.ID, arg.Front, arg.Back)
+	row := q.db.QueryRowContext(ctx, createFlashcard,
+		arg.ID,
+		arg.SetID,
+		arg.Front,
+		arg.Back,
+	)
 	var i Flashcard
-	err := row.Scan(&i.ID, &i.Front, &i.Back)
+	err := row.Scan(
+		&i.SetID,
+		&i.ID,
+		&i.Front,
+		&i.Back,
+	)
 	return i, err
 }
 
 const getAllFlashcards = `-- name: GetAllFlashcards :many
-SELECT id, front, back FROM flashcards
+SELECT set_id, id, front, back FROM flashcards
 `
 
 func (q *Queries) GetAllFlashcards(ctx context.Context) ([]Flashcard, error) {
@@ -47,7 +59,50 @@ func (q *Queries) GetAllFlashcards(ctx context.Context) ([]Flashcard, error) {
 	var items []Flashcard
 	for rows.Next() {
 		var i Flashcard
-		if err := rows.Scan(&i.ID, &i.Front, &i.Back); err != nil {
+		if err := rows.Scan(
+			&i.SetID,
+			&i.ID,
+			&i.Front,
+			&i.Back,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getFlashcardsBySetId = `-- name: GetFlashcardsBySetId :many
+SELECT set_id, id, front, back FROM flashcards
+WHERE (set_id = $1) AND (id = $2)
+`
+
+type GetFlashcardsBySetIdParams struct {
+	SetID uuid.UUID `json:"set_id"`
+	ID    int32     `json:"id"`
+}
+
+func (q *Queries) GetFlashcardsBySetId(ctx context.Context, arg GetFlashcardsBySetIdParams) ([]Flashcard, error) {
+	rows, err := q.db.QueryContext(ctx, getFlashcardsBySetId, arg.SetID, arg.ID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Flashcard
+	for rows.Next() {
+		var i Flashcard
+		if err := rows.Scan(
+			&i.SetID,
+			&i.ID,
+			&i.Front,
+			&i.Back,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
