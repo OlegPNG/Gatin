@@ -33,6 +33,12 @@ func(s session) isExpired() bool {
     return s.expiry.Before(time.Now())
 }
 
+func(s session) extend() {
+    if !s.isExpired() {
+	s.expiry.Add(120 * time.Second)
+    }
+}
+
 type State struct {
     Db *database.Queries
     R *chi.Mux

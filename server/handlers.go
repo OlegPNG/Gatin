@@ -423,5 +423,6 @@ func(s *State) validateSessionToken(req *http.Request) (session, error) {
 	return session{}, errors.New("Token Expired")
     }
 
+    userSession.extend()
     return userSession, nil
 }
