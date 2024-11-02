@@ -12,30 +12,23 @@ import (
 )
 
 const createFlashcard = `-- name: CreateFlashcard :one
-INSERT INTO flashcards (id, set_id, front, back)
+INSERT INTO flashcards (set_id, front, back)
 VALUES (
     $1,
     $2,
-    $3,
-    $4
+    $3
 )
 RETURNING set_id, id, front, back
 `
 
 type CreateFlashcardParams struct {
-	ID    int32     `json:"id"`
 	SetID uuid.UUID `json:"set_id"`
 	Front string    `json:"front"`
 	Back  string    `json:"back"`
 }
 
 func (q *Queries) CreateFlashcard(ctx context.Context, arg CreateFlashcardParams) (Flashcard, error) {
-	row := q.db.QueryRowContext(ctx, createFlashcard,
-		arg.ID,
-		arg.SetID,
-		arg.Front,
-		arg.Back,
-	)
+	row := q.db.QueryRow(ctx, createFlashcard, arg.SetID, arg.Front, arg.Back)
 	var i Flashcard
 	err := row.Scan(
 		&i.SetID,
@@ -46,12 +39,18 @@ func (q *Queries) CreateFlashcard(ctx context.Context, arg CreateFlashcardParams
 	return i, err
 }
 
+type CreateFlashcardsParams struct {
+	SetID uuid.UUID `json:"set_id"`
+	Front string    `json:"front"`
+	Back  string    `json:"back"`
+}
+
 const getAllFlashcards = `-- name: GetAllFlashcards :many
 SELECT set_id, id, front, back FROM flashcards
 `
 
 func (q *Queries) GetAllFlashcards(ctx context.Context) ([]Flashcard, error) {
-	rows, err := q.db.QueryContext(ctx, getAllFlashcards)
+	rows, err := q.db.Query(ctx, getAllFlashcards)
 	if err != nil {
 		return nil, err
 	}
@@ -68,9 +67,6 @@ func (q *Queries) GetAllFlashcards(ctx context.Context) ([]Flashcard, error) {
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -80,16 +76,11 @@ func (q *Queries) GetAllFlashcards(ctx context.Context) ([]Flashcard, error) {
 
 const getFlashcardsBySetId = `-- name: GetFlashcardsBySetId :many
 SELECT set_id, id, front, back FROM flashcards
-WHERE (set_id = $1) AND (id = $2)
+WHERE (set_id = $1)
 `
 
-type GetFlashcardsBySetIdParams struct {
-	SetID uuid.UUID `json:"set_id"`
-	ID    int32     `json:"id"`
-}
-
-func (q *Queries) GetFlashcardsBySetId(ctx context.Context, arg GetFlashcardsBySetIdParams) ([]Flashcard, error) {
-	rows, err := q.db.QueryContext(ctx, getFlashcardsBySetId, arg.SetID, arg.ID)
+func (q *Queries) GetFlashcardsBySetId(ctx context.Context, setID uuid.UUID) ([]Flashcard, error) {
+	rows, err := q.db.Query(ctx, getFlashcardsBySetId, setID)
 	if err != nil {
 		return nil, err
 	}
@@ -106,9 +97,6 @@ func (q *Queries) GetFlashcardsBySetId(ctx context.Context, arg GetFlashcardsByS
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

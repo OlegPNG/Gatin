@@ -1,9 +1,10 @@
 package main
 
 import (
-	//"context"
-	"database/sql"
+	"context"
+	//"database/sql"
 	"time"
+
 	//"encoding/json"
 	//"io"
 	"log"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/jackc/pgx/v4"
 
 	//"github.com/google/uuid"
 	"github.com/joho/godotenv"
@@ -60,7 +62,12 @@ func main() {
 
     port := os.Getenv("GATIN_PORT")
 
-    db, err := sql.Open("postgres", dbURL)
+    /*db, err := sql.Open("postgres", dbURL)
+    if err != nil {
+	log.Fatalf("Error connecting to database: %v", err)
+    }*/
+
+    db, err := pgx.Connect(context.Background(), dbURL)
     if err != nil {
 	log.Fatalf("Error connecting to database: %v", err)
     }

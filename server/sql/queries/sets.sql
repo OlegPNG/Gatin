@@ -8,3 +8,10 @@ VALUES (
 )
 RETURNING *;
 
+-- name: GetSetsByAccount :many
+SELECT id FROM sets
+WHERE (email = $1);
+
+-- name: GetSetOwner :one
+SELECT email FROM sets
+WHERE (id = $1);

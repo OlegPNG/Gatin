@@ -5,12 +5,15 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"io"
+
 	//"io"
 	"log"
 	"net/http"
 	"time"
 
 	"gatin-server/internal/database"
+
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -24,7 +27,11 @@ func(s *State) setupHandlers() {
     //s.R.Post("/api/flashcard", s.TestFlashcardPostHandler)
 
     s.R.Get("/api/flashcard", s.TestFlashcardGetHandler)
-    s.R.Post("/api/testset", s.CreateTestSetHandler)
+    s.R.Get("/api/sets", s.SetGetHandler)
+    s.R.Post("/api/sets", s.SetPostHandler)
+
+    s.R.Get("/api/flashcards", s.FlashcardGetHandler)
+    s.R.Post("/api/flashcards", s.FlashcardPostHandler)
 
     s.R.Post("/api/register", s.RegisterHandler)
     s.R.Post("/api/signin", s.SigninHandler)
@@ -61,24 +68,202 @@ func(s *State) setupHandlers() {
 	w.WriteHeader(http.StatusOK)
 }*/
 
-func(s *State) CreateTestSetHandler(w http.ResponseWriter, req *http.Request) {
-    name := "Test Set"
-    description := "This is a test set not meant to be accessed."
+// Creates Sets
+func(s *State) SetPostHandler(w http.ResponseWriter, req *http.Request) {
+    userSession, err := s.validateSessionToken(req)
+    if err != nil {
+	log.Println(err)
+	w.WriteHeader(http.StatusUnauthorized)
+	return
+    }
 
-    _, err := s.Db.CreateSet(
+    raw, err := io.ReadAll(req.Body)
+    if err != nil {
+	log.Println("SetPostHandler error: " + err.Error())
+	w.WriteHeader(http.StatusInternalServerError)
+	return
+    }
+
+    body := struct {
+	title string
+	description string
+    }{}
+
+    err = json.Unmarshal(raw, &body)
+    if err != nil {
+	log.Println("SetPostHandler error: " + err.Error())
+	w.WriteHeader(http.StatusInternalServerError)
+	return
+    }
+
+    s.Db.CreateSet(
 	context.Background(),
 	database.CreateSetParams{
 	    ID: uuid.New(),
-	    Title: name,
-	    Description: description,
-	    Email: "admin@gatin.dev",
+	    Title: body.title,
+	    Description: body.description,
+	    Email: userSession.email,
 	},
     )
+}
 
+func(s *State) SetGetHandler(w http.ResponseWriter, req *http.Request) {
+    userSession, err := s.validateSessionToken(req)
     if err != nil {
-	log.Println("Db.CreateSet error: " + err.Error())
+	w.WriteHeader(http.StatusUnauthorized)
+	return
     }
 
+    sets, err := s.Db.GetSetsByAccount(context.Background(), userSession.email)
+    if err != nil {
+	log.Println(err)
+	w.WriteHeader(http.StatusInternalServerError)
+	return
+    }
+
+    // Creates struct to generate json response from, contains list of ids
+    setResponse := struct {
+	Sets []uuid.UUID `json:"sets"`
+    }{ Sets: sets }
+
+    raw, err := json.Marshal(setResponse)
+    if err != nil {
+	log.Println(err)
+	w.WriteHeader(http.StatusInternalServerError)
+	return
+    }
+
+    w.Write(raw)
+}
+
+type ClientFlashcard struct {
+    Front   string  `json:"front"`
+    Back    string  `json:"back"`
+}
+
+func createFlashcardDbObjects(set uuid.UUID, cards []ClientFlashcard) []database.CreateFlashcardsParams {
+    dbCards := []database.CreateFlashcardsParams{}
+    for _, card := range cards {
+	dbCards = append(dbCards, database.CreateFlashcardsParams{
+	    SetID: set,
+	    Front: card.Front,
+	    Back: card.Back,
+	})
+    }
+
+    return dbCards
+}
+
+func(s *State) FlashcardPostHandler(w http.ResponseWriter, req *http.Request) {
+    userSession, err := s.validateSessionToken(req)
+    if err != nil {
+	w.WriteHeader(http.StatusUnauthorized)
+	return
+    }
+
+    set := req.URL.Query().Get("set")
+    set_id, err := uuid.Parse(set)
+    if err != nil {
+	log.Println("FlashcardPostHandler error: " + err.Error())
+	w.WriteHeader(http.StatusBadRequest)
+	return
+    }
+
+    dbEmail, err := s.Db.GetSetOwner(context.Background(), set_id)
+    if err != nil {
+	log.Println("FlashcardpostHandler error: " + err.Error())
+	w.WriteHeader(http.StatusInternalServerError)
+	return
+    }
+
+    if userSession.email != dbEmail {
+	w.WriteHeader(http.StatusUnauthorized)
+	return
+    }
+
+    raw, err := io.ReadAll(req.Body)
+    if err != nil {
+	log.Println("FlashcardPostHandler error: " + err.Error())
+	w.WriteHeader(http.StatusBadRequest)
+	return
+    }
+    fcRequest := struct {
+	Flashcards []ClientFlashcard	`json:"flashcards"`
+    }{}
+
+    err = json.Unmarshal(raw, &fcRequest)
+    if err != nil {
+	log.Println("FlashcardPostHahndler error: " + err.Error())
+	w.WriteHeader(http.StatusBadRequest)
+	return
+    }
+
+    dbCards := createFlashcardDbObjects(set_id, fcRequest.Flashcards)
+
+    total, err := s.Db.CreateFlashcards(context.Background(), dbCards)
+    if err != nil {
+	log.Printf("FlashcardPostHandler error: %v\n", err)
+	w.WriteHeader(http.StatusInternalServerError)
+	return
+    }
+    log.Printf("Created %v flashcards\n", total)
+
+    return
+}
+
+func(s *State) FlashcardGetHandler(w http.ResponseWriter, req *http.Request) {
+    userSession, err := s.validateSessionToken(req)
+    if err != nil {
+	w.WriteHeader(http.StatusUnauthorized)
+	return
+    }
+
+    set := req.URL.Query().Get("set")
+    set_id, err := uuid.Parse(set)
+    if err != nil {
+	log.Println("FlashcardGetHandler error: " + err.Error())
+	w.WriteHeader(http.StatusBadRequest)
+	return
+    }
+
+    dbEmail, err := s.Db.GetSetOwner(context.Background(), set_id)
+    if err != nil {
+	log.Println("FlashcardGetHandler error: " + err.Error())
+	w.WriteHeader(http.StatusInternalServerError)
+	return
+    }
+
+    if userSession.email != dbEmail {
+	w.WriteHeader(http.StatusUnauthorized)
+	return
+    }
+
+    fc, err := s.Db.GetFlashcardsBySetId(
+	context.Background(),
+	set_id,
+    )
+    if err != nil {
+	log.Println("FlashcardGetHandler error: " + err.Error())
+	w.WriteHeader(http.StatusInternalServerError)
+	return
+    }
+
+    log.Printf("Responding with %v flashcards", len(fc))
+
+    flashcardResponse := struct {
+	Cards []database.Flashcard  `json:"flashcards"`
+    }{
+	fc,
+    }
+    raw, err := json.Marshal(flashcardResponse)
+    if err != nil {
+	log.Println("FlashcardGetHandler error: " + err.Error())
+	w.WriteHeader(http.StatusInternalServerError)
+	return
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    w.Write(raw)
 }
 
 func(s *State) TestFlashcardGetHandler(w http.ResponseWriter, req *http.Request) {
@@ -162,7 +347,7 @@ func(s *State) RefreshHandler(w http.ResponseWriter, r *http.Request) {
 
     sessionToken := c.Value
 
-    userSession, err := s.verifySessionToken(sessionToken)
+    userSession, err := s.validateSessionToken(r)
     if err != nil {
 	w.WriteHeader(http.StatusUnauthorized)
 	return
@@ -209,18 +394,7 @@ func(s *State) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 
 // Test handler for session cookies
 func(s *State) WelcomeHandler(w http.ResponseWriter, r *http.Request) {
-    c, err := r.Cookie("session_token")
-    if err != nil {
-	if err == http.ErrNoCookie {
-	    w.WriteHeader(http.StatusUnauthorized)
-	    return
-	}
-	w.WriteHeader(http.StatusBadRequest)
-	return
-    }
-    sessionToken := c.Value
-
-    userSession, err := s.verifySessionToken(sessionToken)
+    userSession, err := s.validateSessionToken(r)
     if err != nil {
 	w.WriteHeader(http.StatusUnauthorized)
 	return
@@ -229,7 +403,16 @@ func(s *State) WelcomeHandler(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte("Welcome " + userSession.email))
 }
 
-func(s *State) verifySessionToken(token string) (session, error) {
+func(s *State) validateSessionToken(req *http.Request) (session, error) {
+    c, err := req.Cookie("session_token")
+    if err != nil {
+	if err == http.ErrNoCookie {
+	    return session{}, errors.New("No session_token cookie provided")
+	}
+	return session{}, errors.New("Bad request")
+    }
+    token := c.Value
+
     userSession, exists := s.sessions[token]
     if !exists{
 	return session{}, errors.New("Invalid Token")

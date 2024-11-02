@@ -14,7 +14,7 @@ SELECT email, password FROM account WHERE email = $1 LIMIT 1
 `
 
 func (q *Queries) GetAccount(ctx context.Context, email string) (Account, error) {
-	row := q.db.QueryRowContext(ctx, getAccount, email)
+	row := q.db.QueryRow(ctx, getAccount, email)
 	var i Account
 	err := row.Scan(&i.Email, &i.Password)
 	return i, err
@@ -35,7 +35,7 @@ type RegisterAccountParams struct {
 }
 
 func (q *Queries) RegisterAccount(ctx context.Context, arg RegisterAccountParams) (Account, error) {
-	row := q.db.QueryRowContext(ctx, registerAccount, arg.Email, arg.Password)
+	row := q.db.QueryRow(ctx, registerAccount, arg.Email, arg.Password)
 	var i Account
 	err := row.Scan(&i.Email, &i.Password)
 	return i, err

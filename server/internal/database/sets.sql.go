@@ -30,7 +30,7 @@ type CreateSetParams struct {
 }
 
 func (q *Queries) CreateSet(ctx context.Context, arg CreateSetParams) (Set, error) {
-	row := q.db.QueryRowContext(ctx, createSet,
+	row := q.db.QueryRow(ctx, createSet,
 		arg.ID,
 		arg.Title,
 		arg.Description,
@@ -44,4 +44,41 @@ func (q *Queries) CreateSet(ctx context.Context, arg CreateSetParams) (Set, erro
 		&i.Email,
 	)
 	return i, err
+}
+
+const getSetOwner = `-- name: GetSetOwner :one
+SELECT email FROM sets
+WHERE (id = $1)
+`
+
+func (q *Queries) GetSetOwner(ctx context.Context, id uuid.UUID) (string, error) {
+	row := q.db.QueryRow(ctx, getSetOwner, id)
+	var email string
+	err := row.Scan(&email)
+	return email, err
+}
+
+const getSetsByAccount = `-- name: GetSetsByAccount :many
+SELECT id FROM sets
+WHERE (email = $1)
+`
+
+func (q *Queries) GetSetsByAccount(ctx context.Context, email string) ([]uuid.UUID, error) {
+	rows, err := q.db.Query(ctx, getSetsByAccount, email)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []uuid.UUID
+	for rows.Next() {
+		var id uuid.UUID
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
