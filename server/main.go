@@ -7,6 +7,7 @@ import (
 
 	//"encoding/json"
 	//"io"
+
 	"log"
 	"net/http"
 	"os"
@@ -18,6 +19,8 @@ import (
 	//"github.com/google/uuid"
 	"github.com/joho/godotenv"
 
+	//"github.com/google/uuid"
+
 	"gatin-server/internal/database"
 	//gMiddleware "gatin-server/middleware"
 
@@ -25,74 +28,72 @@ import (
 )
 
 type session struct {
-    email   string
-    expiry  time.Time
+	email  string
+	expiry time.Time
 }
 
-func(s session) isExpired() bool {
-    return s.expiry.Before(time.Now())
+func (s session) isExpired() bool {
+	return s.expiry.Before(time.Now())
 }
 
-func(s session) extend() {
-    if !s.isExpired() {
-	s.expiry.Add(120 * time.Second)
-    }
+func (s session) extend() {
+	if !s.isExpired() {
+		s.expiry.Add(120 * time.Second)
+	}
 }
 
 type State struct {
-    Db *database.Queries
-    R *chi.Mux
-    sessions map[string]session
+	Db       *database.Queries
+	R        *chi.Mux
+	sessions map[string]session
 }
 
-type Flashcard struct {
-    Id	    *int
-    Front   string
-    Back    string
+type Flashcardz struct {
+	Id    *int
+	Front string
+	Back  string
 }
 
 type FlashcardMsg struct {
-    Flashcards []Flashcard
+	Flashcards []Flashcard
 }
 
 func main() {
-    if err := godotenv.Load(); err != nil {
-	log.Fatalf("Error loading the .env file: %v", err)
-    }
 
-    state := State{}
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading the .env file: %v", err)
+	}
 
-    state.sessions = map[string]session{}
+	state := State{}
+	state.sessions = map[string]session{}
 
-    dbURL := os.Getenv("PSQL_URL")
+	dbURL := os.Getenv("PSQL_URL")
+	port := os.Getenv("GATIN_PORT")
+	/*db, err := sql.Open("postgres", dbURL)
+	    if err != nil {
+		log.Fatalf("Error connecting to database: %v", err)
+	    }*/
 
-    port := os.Getenv("GATIN_PORT")
+	db, err := pgx.Connect(context.Background(), dbURL)
+	if err != nil {
+		log.Fatalf("Error connecting to database: %v", err)
+	}
 
-    /*db, err := sql.Open("postgres", dbURL)
-    if err != nil {
-	log.Fatalf("Error connecting to database: %v", err)
-    }*/
+	dbQueries := database.New(db)
 
-    db, err := pgx.Connect(context.Background(), dbURL)
-    if err != nil {
-	log.Fatalf("Error connecting to database: %v", err)
-    }
+	state.Db = dbQueries
 
-    dbQueries := database.New(db)
+	r := chi.NewRouter()
 
-    state.Db = dbQueries
+	r.Use(middleware.Logger)
 
-    r := chi.NewRouter()
+	state.R = r
 
-    r.Use(middleware.Logger)
+	state.setupHandlers()
 
-    state.R = r
+	log.Print("Server listening on http:/localhost:" + port)
+	if err := http.ListenAndServe("0.0.0.0:"+port, r); err != nil {
+		log.Fatalf("There was an error with the http server: %v", err)
+	}
 
-    state.setupHandlers()
-
-    log.Print("Server listening on http:/localhost:" + port)
-    if err := http.ListenAndServe("0.0.0.0:" + port, r); err != nil {
-	log.Fatalf("There was an error with the http server: %v", err)
-    }
 }
-
