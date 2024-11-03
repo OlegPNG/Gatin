@@ -1,138 +1,71 @@
-/* Sidebar container styles */
+/* Sidebar.css */
+
 .sidebar {
-  width: 250px; /* Sidebar width */
-  background-color: #f5f5f5; /* Sidebar background */
-  padding: 20px;
-  height: 100vh; /* Full height of the viewport */
-  position: fixed; /* Sticks to the left */
-  top: 0;
-  left: 0;
-  overflow-y: auto; /* Adds scrolling to the sidebar */
+  width: 15rem; /* Responsive width */
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ddd;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1); /* Subtle sidebar shadow */
 }
 
-/* Sidebar title */
-.sidebar-title {
-  font-size: 18px;
-  margin-bottom: 10px;
+.title {
+  font-size: 1.2rem;
   font-weight: bold;
+  margin-top: 1rem;
 }
 
-/* Sidebar menu styles */
-.sidebar-menu {
-  list-style: none;
+.divider {
+  height: 1px;
+  background-color: #ddd;
+  margin: 1rem 0 1rem 0; /* Adds space above and below the divider */
+}
+
+.classmate-list {
+  list-style-type: none;
   padding: 0;
-  margin: 0 0 20px 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 160px);
 }
 
-/* Menu item styles */
-.menu-item {
-  padding: 10px;
-  margin-bottom: 5px;
-  background-color: #007bff; /* Menu item background */
-  color: white;
-  text-align: center;
-  border-radius: 5px;
+.classmate-item {
+  padding: 0.8rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  border-bottom: 1px solid #eee;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Hover effect for menu items */
-.menu-item:hover {
-  background-color: #0056b3;
+.classmate-item:hover {
+  background-color: #e0f3ff;
 }
 
-/* Login form container within the sidebar */
-.auth-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Aligns to the start of the sidebar */
-  padding: 10px;
-  margin-top: 20px;
-  width: 100%;
+.classmate-item.active {
+  background-color: #d9f1ff;
+  color: #333;
+  font-weight: bold;
+  border-left: 4px solid #007bff;
 }
 
-/* Login title */
-.auth-container h2 {
-  margin-bottom: 10px;
-  font-size: 18px;
+/* Optional scrollbar styling */
+.classmate-list::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* Form styling */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Input field styling */
-input {
-  padding: 8px;
-  width: 180px; /* Width adjusted to fit the sidebar */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Button styling */
-button {
-  padding: 8px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-/* Hover effect for buttons */
-button:hover {
-  background-color: #0056b3;
-}
-
-/* Error message styling */
-.error {
-  color: red;
-  margin-top: 5px;
-}
-
-/* Main content area to the right of the sidebar */
-.main-content {
-  margin-left: 250px; /* Leaves space for the sidebar */
-  padding: 20px;
-  overflow-y: auto; /* Adds scrolling to the content */
-}
-
-/* Chapters container */
-.chapters {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Individual chapter card */
-.chapter {
-  padding: 20px;
-  border: 1px solid #ccc;
+.classmate-list::-webkit-scrollbar-track {
+  background: #f7f7f7;
   border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Chapter buttons */
-.chapter-buttons {
-  display: flex;
-  gap: 10px;
+.classmate-list::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+  border-radius: 10px;
 }
 
-.chapter-buttons button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.chapter-buttons button:hover {
-  background-color: #0056b3;
+.classmate-list::-webkit-scrollbar-thumb:hover {
+  background-color: #b3b3b3;
 }

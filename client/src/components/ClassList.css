@@ -1,32 +1,38 @@
-.class-list-container {
-  position: absolute;
-  top: 150px; /* Below the Menu Selection */
-  left: 220px; /* Adjust to prevent overlap */
-  width: 200px;
-  height: 400px; /* Fixed height for scrolling */
-  border: 1px solid #ccc;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-  overflow-y: auto; /* Enables scrolling */
-  padding: 10px;
+/* ChapterList.css */
+
+.card {
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Slightly deeper shadow */
+  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
-.class-list-title {
-  font-weight: bold;
-  margin-bottom: 10px;
+.card:hover {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15); /* More depth on hover */
+  transform: translateY(-3px); /* Slight lift effect on hover */
 }
 
-.class-item {
-  padding: 10px;
-  margin-bottom: 5px;
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  border-radius: 5px;
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.button {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s, box-shadow 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.class-item:hover {
-  background-color: #0056b3;
+.button:hover {
+  background-color: #d0d0d0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

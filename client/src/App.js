@@ -1,26 +1,22 @@
-import React, { useState } from 'react';
-import './App.css';
+// App.js
+import Header from './components/Header'; // Correct import path
+
+// Other imports
 import Sidebar from './components/Sidebar';
+import ChapterList from './components/ChapterList';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    // You could also save a token or redirect the user upon login
-  };
-
-  return (
-    <div className="app-container">
-      {isAuthenticated ? (
-        <Sidebar onLogin={handleLogin} />
-      ) : (
-        <div className="login-prompt">
-          <h2>Please log in to access the menu.</h2>
+    return (
+        <div style={{ fontFamily: 'Arial, sans-serif' }}>
+            <Header />
+            <div style={{ display: 'flex' }}>
+                <Sidebar />
+                <main style={{ flex: 1, padding: '1rem' }}>
+                    <ChapterList />
+                </main>
+            </div>
         </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default App;

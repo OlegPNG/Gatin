@@ -1,52 +1,34 @@
+// Sidebar.jsx
 import React, { useState } from 'react';
+import MenuSelection from './MenuSelection';
 import './Sidebar.css';
 
-const Sidebar = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+function Sidebar() {
+    const [activeClassmate, setActiveClassmate] = useState(null);
+    const classmates = [
+        'Alice Johnson', 'Bob Smith', 'Catherine Lee', 'Daniel Harris', 'Emma Brown',
+        'Fiona Green', 'George White', 'Hannah Black', 'Ian Grey', 'Julia Rose',
+        'Kevin Young', 'Lily James', 'Michael Adams', 'Nancy King', 'Olivia Hall'
+    ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      setError('Please fill in both fields.');
-    } else {
-      setError('');
-      onLogin(); // Call parent function to handle successful login
-    }
-  };
-
-  return (
-    <div className="sidebar">
-      <h2 className="sidebar-title">Menu Selection</h2>
-      <ul className="sidebar-menu">
-        <li className="menu-item">Flashcards</li>
-        <li className="menu-item">Matching</li>
-        <li className="menu-item">Quizzes</li>
-        <li className="menu-item">Classroom</li>
-      </ul>
-
-      <div className="auth-container">
-        <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="submit">Login</button>
-          {error && <div className="error">{error}</div>}
-        </form>
-      </div>
-    </div>
-  );
-};
+    return (
+        <aside className="sidebar">
+            <MenuSelection />
+            <div className="divider"></div> {/* Divider added here */}
+            <h3 className="title">Class List</h3>
+            <ul className="classmate-list">
+                {classmates.map((classmate, index) => (
+                    <li
+                        key={index}
+                        className={`classmate-item ${activeClassmate === classmate ? 'active' : ''}`}
+                        onClick={() => setActiveClassmate(classmate)}
+                    >
+                        {classmate}
+                    </li>
+                ))}
+            </ul>
+        </aside>
+    );
+}
 
 export default Sidebar;

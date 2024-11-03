@@ -1,28 +1,35 @@
+// ChapterList.jsx
 import React from 'react';
-import './App.css'; // Ensure to use the main CSS for consistent styling
+import './ChapterList.css';
 
-const chapters = [
-  { title: 'Chapter 1', cards: 33 },
-  { title: 'Chapter 2', cards: 45 },
-  { title: 'Chapter 3', cards: 27 },
-];
-
-const ChapterList = () => {
-  return (
-    <div className="chapter-list">
-      {chapters.map((chapter, index) => (
-        <div key={index} className="chapter-card">
-          <div className="chapter-title">{chapter.title}</div>
-          <div className="chapter-cards">{chapter.cards} Cards</div>
-          <div className="chapter-buttons">
-            <button className="chapter-button">Flashcards</button>
-            <button className="chapter-button">Notes</button>
-            <button className="chapter-button">Discussion</button>
-          </div>
+function ChapterCard({ chapter, cardCount }) {
+    return (
+        <div className="card">
+            <h2 className="chapter-title">{chapter}</h2>
+            <p className="card-count">{cardCount} Cards</p>
+            <div className="actions">
+                <button className="button">All Flashcards</button>
+                <button className="button">Next</button>
+                <button className="button">Discussion Board</button>
+            </div>
         </div>
-      ))}
-    </div>
-  );
-};
+    );
+}
+
+function ChapterList() {
+    const chapters = [
+        { chapter: 'Chapter 1', cardCount: 33 },
+        { chapter: 'Chapter 2', cardCount: 45 },
+        { chapter: 'Chapter 3', cardCount: 27 },
+    ];
+
+    return (
+        <section className="chapter-list">
+            {chapters.map((ch, index) => (
+                <ChapterCard key={index} chapter={ch.chapter} cardCount={ch.cardCount} />
+            ))}
+        </section>
+    );
+}
 
 export default ChapterList;

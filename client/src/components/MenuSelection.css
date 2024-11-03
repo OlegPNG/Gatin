@@ -1,13 +1,18 @@
+/* MenuSelection.css */
+
 .menu-selection {
-  position: fixed;
-  top: 100px; /* Place it below the header */
-  left: 20px; /* Align to the left */
-  width: 180px;
-  background-color: #f8f9fa;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  z-index: 100; /* Keeps it on top */
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+}
+
+.menu-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.3rem;
 }
 
 .menu-list {
@@ -17,16 +22,20 @@
 }
 
 .menu-item {
-  padding: 8px;
-  margin-bottom: 5px;
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: color 0.3s;
 }
 
 .menu-item:hover {
-  background-color: #0056b3;
+  color: #007bff; /* Highlight color on hover */
+}
+
+.menu-icon {
+  margin-right: 0.5rem;
+  color: #007bff; /* Color for the arrow or checkmark */
+  font-size: 0.8rem; /* Slightly smaller icon */
 }

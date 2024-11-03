@@ -1,28 +1,28 @@
+// MenuSelection.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './MenuSelection.css';
 
-const MenuSelection = () => {
-  const menuItems = [
-    { name: 'Flashcards', path: '/' },
-    { name: 'Matching', path: '/matching' },
-    { name: 'Quizzes', path: '/quizzes' },
-    { name: 'Classroom', path: '/classroom' }
-  ];
+function MenuSelection() {
+    const menuItems = [
+        { name: 'Flashcards' },
+        { name: 'Matching' },
+        { name: 'Quizzes' },
+        { name: 'Classroom' },
+    ];
 
-  return (
-    <div className="menu-selection">
-      <ul className="menu-list">
-        {menuItems.map((item, index) => (
-          <li key={index} className="menu-item">
-            <Link to={item.path} style={{ color: 'inherit', textDecoration: 'none' }}>
-              {item.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+    return (
+        <div className="menu-selection">
+            <h3 className="menu-title">Menu Selection</h3>
+            <ul className="menu-list">
+                {menuItems.map((item, index) => (
+                    <li key={index} className="menu-item">
+                        <span className="menu-icon">➤</span>
+                        {item.name}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
 
 export default MenuSelection;
