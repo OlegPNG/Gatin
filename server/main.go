@@ -2,18 +2,20 @@ package main
 
 import (
 	//"context"
-	"database/sql"
+
 	//"encoding/json"
 	//"io"
+
+	"database/sql"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
+	"github.com/joho/godotenv"
 
 	//"github.com/google/uuid"
-	"github.com/joho/godotenv"
 
 	"gatin-server/internal/database"
 	//gMiddleware "gatin-server/middleware"
@@ -37,6 +39,7 @@ type FlashcardMsg struct {
 }
 
 func main() {
+
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading the .env file: %v", err)
 	}
@@ -68,4 +71,5 @@ func main() {
 	if err := http.ListenAndServe("0.0.0.0:"+port, r); err != nil {
 		log.Fatalf("There was an error with the http server: %v", err)
 	}
+
 }

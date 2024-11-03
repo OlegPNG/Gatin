@@ -6,70 +6,12 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 
 	"gatin-server/internal/database"
 	gMiddleware "gatin-server/middleware"
 
 	"github.com/google/uuid"
-	"github.com/joho/godotenv"
-	openai "github.com/sashabaranov/go-openai"
-	"github.com/sashabaranov/go-openai/jsonschema"
 )
-
-type Flashcard struct {
-	ID    string `json:"id"`
-	Front string `json:"front"`
-	Back  string `json:"back"`
-}
-
-func GenerateFlashcards(notes string) []Flashcard {
-	godotenv.Load(".env")
-	key := os.Getenv("OPENAI_API_KEY")
-	client := openai.NewClient(key)
-	ctx := context.Background()
-
-	type Result struct {
-		Flashcards []Flashcard `json:"flashcards"`
-	}
-
-	var result Result
-	schema, err := jsonschema.GenerateSchemaForType(result)
-	if err != nil {
-		log.Fatalf("GenerateSchemaForType error: %v", err)
-	}
-
-	resp, err := client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
-		Model: openai.GPT4oMini,
-		Messages: []openai.ChatCompletionMessage{
-			{
-				Role:    openai.ChatMessageRoleSystem,
-				Content: "Convert the following notes into Flashcards using the format provided. The front is the term or concept. The back is the definition",
-			},
-			{
-				Role:    openai.ChatMessageRoleUser,
-				Content: notes,
-			},
-		},
-		ResponseFormat: &openai.ChatCompletionResponseFormat{
-			Type: openai.ChatCompletionResponseFormatTypeJSONSchema,
-			JSONSchema: &openai.ChatCompletionResponseFormatJSONSchema{
-				Name:   "flash_cards",
-				Schema: schema,
-				Strict: true,
-			},
-		},
-	})
-	if err != nil {
-		log.Fatalf("CreateChatCompletion error: %v", err)
-	}
-	err = schema.Unmarshal(resp.Choices[0].Message.Content, &result)
-	if err != nil {
-		log.Fatalf("Unmarshal schema error: %v", err)
-	}
-
-	return result.Flashcards
-}
 
 func (s *State) setupHandlers() {
 	s.R.Get("/api/public", func(w http.ResponseWriter, req *http.Request) {
@@ -132,21 +74,42 @@ func (s *State) setupHandlers() {
 
 	s.R.Get("/api/generate", func(w http.ResponseWriter, req *http.Request) {
 		//PUT NOTES HERE
-		notes := `POST NOTES`
+		//notes := ``
 
-		flashcards := GenerateFlashcards(notes)
+		var course *string
+		var unit *string
+		content := "use an extremely HEAVY southern accent"
+		myPreferences := cardPreferences{false, course, unit, &content}
 
-		/*
-			objects := []Flashcard{}
-			err = json.Unmarshal([]byte(flashcards), &objects)
-			if err != nil {
-				log.Println("Error Unmarshalling chatpgt responses %v", err)
-			}
-		*/
+		flashcards, err := generateSet(userNotes, myPreferences)
+		if err != nil {
+			log.Printf("Error creating set: %v", err)
+		}
 
 		data, err := json.Marshal(flashcards)
 		if err != nil {
 			log.Printf("Failed to marshal JSON response: %v", flashcards)
+			w.WriteHeader(500)
+			return
+		}
+
+		w.Header().Add("Content-type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(data)
+	})
+
+	s.R.Get("/sets/quiz", func(w http.ResponseWriter, req *http.Request) {
+		//get flashcards from DB
+		var cards string = `insert cards here`
+
+		quiz, err := CreateQuiz(cards)
+		if err != nil {
+			log.Printf("Error creating set: %v", err)
+		}
+
+		data, err := json.Marshal(quiz)
+		if err != nil {
+			log.Printf("Failed to marshal JSON response: %v", quiz)
 			w.WriteHeader(500)
 			return
 		}
