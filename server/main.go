@@ -1,8 +1,10 @@
 package main
 
 import (
-	//"context"
-	"database/sql"
+	"context"
+	//"database/sql"
+	"time"
+
 	//"encoding/json"
 	//"io"
 	"log"
@@ -11,6 +13,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/jackc/pgx/v4"
+
 	//"github.com/google/uuid"
 	"github.com/joho/godotenv"
 
@@ -20,9 +24,25 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type session struct {
+    email   string
+    expiry  time.Time
+}
+
+func(s session) isExpired() bool {
+    return s.expiry.Before(time.Now())
+}
+
+func(s session) extend() {
+    if !s.isExpired() {
+	s.expiry.Add(120 * time.Second)
+    }
+}
+
 type State struct {
     Db *database.Queries
     R *chi.Mux
+    sessions map[string]session
 }
 
 type Flashcard struct {
@@ -42,11 +62,18 @@ func main() {
 
     state := State{}
 
+    state.sessions = map[string]session{}
+
     dbURL := os.Getenv("PSQL_URL")
 
     port := os.Getenv("GATIN_PORT")
 
-    db, err := sql.Open("postgres", dbURL)
+    /*db, err := sql.Open("postgres", dbURL)
+    if err != nil {
+	log.Fatalf("Error connecting to database: %v", err)
+    }*/
+
+    db, err := pgx.Connect(context.Background(), dbURL)
     if err != nil {
 	log.Fatalf("Error connecting to database: %v", err)
     }
