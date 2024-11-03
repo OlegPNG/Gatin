@@ -8,8 +8,21 @@ import (
 	"github.com/google/uuid"
 )
 
+type Account struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 type Flashcard struct {
-	ID    uuid.UUID `json:"id"`
+	SetID uuid.UUID `json:"set_id"`
+	ID    int32     `json:"id"`
 	Front string    `json:"front"`
 	Back  string    `json:"back"`
+}
+
+type Set struct {
+	ID          uuid.UUID `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Email       string    `json:"email"`
 }
