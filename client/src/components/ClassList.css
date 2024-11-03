@@ -1,0 +1,32 @@
+.class-list-container {
+  position: absolute;
+  top: 150px; /* Below the Menu Selection */
+  left: 220px; /* Adjust to prevent overlap */
+  width: 200px;
+  height: 400px; /* Fixed height for scrolling */
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  overflow-y: auto; /* Enables scrolling */
+  padding: 10px;
+}
+
+.class-list-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.class-item {
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.class-item:hover {
+  background-color: #0056b3;
+}

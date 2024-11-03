@@ -1,19 +1,15 @@
 import React from 'react';
 import './TopBar.css';
 
-const TopBar = ({ isAuthenticated, onLoginClick, onLogout }) => {
+const TopBar = ({ isAuthenticated, onLoginClick }) => {
   return (
     <div className="top-bar">
-      <div className="menu-selection">Menu Selection</div>
-      <div className="login-section">
+      <div className="course-name">COURSE</div>
+      <div className="auth-info">
         {isAuthenticated ? (
-          <button className="login-button" onClick={onLogout}>
-            Logout
-          </button>
+          <button className="auth-button">Logout</button>
         ) : (
-          <button className="login-button" onClick={onLoginClick}>
-            Login
-          </button>
+          <button className="auth-button" onClick={onLoginClick}>Login</button>
         )}
       </div>
     </div>

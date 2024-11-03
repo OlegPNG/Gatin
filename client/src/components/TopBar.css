@@ -1,4 +1,3 @@
-/* Top Bar Styling */
 .top-bar {
   position: fixed;
   top: 0;
@@ -11,46 +10,29 @@
   background-color: #f1f1f1;
   border-bottom: 1px solid #ccc;
   z-index: 1000;
-  box-sizing: border-box; /* Ensure padding doesn't overflow */
+  box-sizing: border-box; /* Ensure proper padding */
 }
 
-.menu-selection {
-  font-size: 18px;
+.course-name {
+  font-size: 24px;
   font-weight: bold;
 }
 
-.login-section {
+.auth-info {
   display: flex;
   align-items: center;
+  margin-right: 20px; /* Add margin to prevent clipping */
 }
 
-.login-button {
+.auth-button {
   padding: 8px 16px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-.login-button:hover {
+.auth-button:hover {
   background-color: #0056b3;
-}
-
-/* Adjustments for smaller screens */
-@media (max-width: 768px) {
-  .top-bar {
-    flex-direction: column; /* Stack elements vertically */
-    align-items: flex-start;
-  }
-
-  .login-section {
-    margin-top: 10px; /* Add spacing for better alignment */
-  }
-
-  .login-button {
-    width: 100%; /* Full width on smaller screens */
-    max-width: 200px; /* Limit the max width */
-  }
 }

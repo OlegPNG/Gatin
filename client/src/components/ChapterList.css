@@ -1,0 +1,45 @@
+.chapter-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px; /* Adjust for top bar and margin */
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(100vh - 80px); /* Height minus top bar */
+  }
+  
+  .chapter-card {
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .chapter-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .chapter-cards {
+    margin-bottom: 10px;
+  }
+  
+  .chapter-button {
+    padding: 8px 16px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .chapter-button:hover {
+    background-color: #0056b3;
+  }
+  
