@@ -43,27 +43,27 @@ type Quiz struct {
 func promptBuilder(userPref cardPreferences) (prompt string) {
 	prompt = ``
 
-	if userPref.terms {
+	if userPref.Terms {
 		prompt += `Convert the following User notes into Flashcards using the format provided. The id starts with 1 and goes to n. Put a term or word on the front. Put the definition on the back.`
-		if userPref.course != nil {
-			prompt += fmt.Sprintf("The course subject is: %v. ", *userPref.course)
+		if userPref.Course != nil {
+			prompt += fmt.Sprintf("The course subject is: %v. ", *userPref.Course)
 		}
-		if userPref.unit != nil {
-			prompt += fmt.Sprintf("The concept or unit is: %v. ", *userPref.unit)
+		if userPref.Unit != nil {
+			prompt += fmt.Sprintf("The concept or unit is: %v. ", *userPref.Unit)
 		}
-		if userPref.content != nil {
-			prompt += "The user has provided the following specifications for creating the flashcards: " + *userPref.content
+		if userPref.Content != nil {
+			prompt += "The user has provided the following specifications for creating the flashcards: " + *userPref.Content
 		}
 	} else {
 		prompt += `Convert the following User notes into Flashcards using the format provided. The id starts with 1 and goes to n. Put a question on the front. Put the answer to the question on the back. `
-		if userPref.course != nil {
-			prompt += fmt.Sprintf("The course subject is: %v. ", *userPref.course)
+		if userPref.Course != nil {
+			prompt += fmt.Sprintf("The course subject is: %v. ", *userPref.Course)
 		}
-		if userPref.unit != nil {
-			prompt += fmt.Sprintf("The concept or unit is: %v. ", *userPref.unit)
+		if userPref.Unit != nil {
+			prompt += fmt.Sprintf("The concept or unit is: %v. ", *userPref.Unit)
 		}
-		if userPref.content != nil {
-			prompt += "The user has provided the following specifications for creating the flashcards: " + *userPref.content
+		if userPref.Content != nil {
+			prompt += "The user has provided the following specifications for creating the flashcards: " + *userPref.Content
 		}
 	}
 	print(prompt)
