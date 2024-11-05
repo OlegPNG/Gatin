@@ -14,16 +14,22 @@ import (
 )
 
 type Flashcard struct {
-	ID    string `json:"id"`
 	Front string `json:"front"`
 	Back  string `json:"back"`
 }
 
+type GenerateRequest struct {
+	Notes       string          `json:"notes"`
+	Preferences cardPreferences `json:"preferences"`
+	Title       string          `json:"title"`
+	Description string          `json:"description"`
+}
+
 type cardPreferences struct {
-	terms   bool
-	course  *string
-	unit    *string
-	content *string
+	Terms   bool    `json:"terms"`
+	Course  *string `json:"course"`
+	Unit    *string `json:"unit"`
+	Content *string `json:"content"`
 }
 
 type Quiz struct {
@@ -63,8 +69,6 @@ func promptBuilder(userPref cardPreferences) (prompt string) {
 	print(prompt)
 	return prompt
 }
-
-var userNotes string = `hardcode notes here`
 
 const (
 	MaxTokens    = 4096
@@ -203,7 +207,7 @@ func CreateQuiz(flashcards string) ([]Quiz, error) {
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleSystem,
-				Content: "for the following flashcards, Use an exaggerated Southern accent, full of colloquialisms, slang, and phonetic spellings that make it hard to understand. Make sure the characters sound like they're straight outta the deep South, with plenty of humor and charm. Use phrases like 'y’all,' 'fixin’ to,' and drop a lot of consonants for that thick drawl.",
+				Content: "For the following flashcards make a quiz. Use the back as the correct answer, make other optionsbe related to the question",
 			},
 			{
 				Role:    openai.ChatMessageRoleUser,
