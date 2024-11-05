@@ -40,8 +40,8 @@ func (s *State) setupHandlers() {
 
 	s.R.Get("/api/welcome", s.WelcomeHandler)
 
-	//s.R.Get("/api/generate", s.Generate__Handler)
-	s.R.Get("/api/quiz", s.Quiz__Handler)
+	s.R.Post("/api/generate", s.GeneratePostHandler)
+	s.R.Get("/api/quiz", s.QuizGetHandler)
 
 }
 
@@ -243,7 +243,7 @@ func (s *State) FlashcardGetHandler(w http.ResponseWriter, req *http.Request) {
 	w.Write(raw)
 }
 
-func (s *State) Quiz__Handler(w http.ResponseWriter, req *http.Request) {
+func (s *State) QuizGetHandler(w http.ResponseWriter, req *http.Request) {
 	userSession, err := s.validateSessionToken(req)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
@@ -253,14 +253,14 @@ func (s *State) Quiz__Handler(w http.ResponseWriter, req *http.Request) {
 	set := req.URL.Query().Get("set")
 	set_id, err := uuid.Parse(set)
 	if err != nil {
-		log.Println("FlashcardGetHandler error: " + err.Error())
+		log.Println("QuizGetHandler error: " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	dbEmail, err := s.Db.GetSetOwner(context.Background(), set_id)
 	if err != nil {
-		log.Println("FlashcardGetHandler error: " + err.Error())
+		log.Println("QuizGetHandler error: " + err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -275,7 +275,7 @@ func (s *State) Quiz__Handler(w http.ResponseWriter, req *http.Request) {
 		set_id,
 	)
 	if err != nil {
-		log.Println("FlashcardGetHandler error: " + err.Error())
+		log.Println("QuizGetHandler error: " + err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -287,52 +287,103 @@ func (s *State) Quiz__Handler(w http.ResponseWriter, req *http.Request) {
 			Front: card.Front,
 			Back:  card.Back,
 		})
-
-		raw, err := json.Marshal(Cards)
-		cardString := string(raw)
-
-		quiz, err := CreateQuiz(cardString)
-		if err != nil {
-			log.Printf("Error creating set: %v", err)
-		}
-
-		data, err := json.Marshal(quiz)
-		if err != nil {
-			log.Printf("Failed to marshal JSON response: %v", quiz)
-			w.WriteHeader(500)
-			return
-		}
-
-		w.Header().Add("Content-type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write(data)
 	}
 
+	raw, err := json.Marshal(Cards)
+	if err != nil {
+		log.Println("QuizGetHandler marshalling error: " + err.Error())
+	}
+	cardString := string(raw)
+
+	quiz, err := CreateQuiz(cardString)
+	if err != nil {
+		log.Printf("Error creating set: %v", err)
+	}
+
+	data, err := json.Marshal(quiz)
+	if err != nil {
+		log.Printf("Failed to marshal JSON response: %v", err)
+		w.WriteHeader(500)
+		return
+	}
+
+	w.Header().Add("Content-type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
-/*
-func (s *State) Generate__Handler(w http.ResponseWriter, req *http.Request){
+func (s *State) GeneratePostHandler(w http.ResponseWriter, req *http.Request) {
+	userSession, err := s.validateSessionToken(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 
-  myPreferences := cardPreferences{false, course, unit, &content}
+	raw, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println("GeneratePostHandler error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
-    //return set ID instead of cards IN JSON
-		flashcards, err := generateSet(userNotes, myPreferences)
+	var generateRequest GenerateRequest
+
+	err = json.Unmarshal(raw, &generateRequest)
+	if err != nil {
+		log.Println("GeneratePostHandler error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	userNotes := generateRequest.Notes
+	userPreferences := generateRequest.Preferences
+
+	flashcards, err := generateSet(userNotes, userPreferences)
+	if err != nil {
+		log.Printf("Error creating set: %v", err)
+	}
+
+	//where do i pull setID from??????????????????????????????????????????
+	setID := uuid.New()
+	title := generateRequest.Title
+	description := generateRequest.Description
+
+	s.Db.CreateSet(
+		context.Background(),
+		database.CreateSetParams{
+			ID:          setID,
+			Title:       title,
+			Description: description,
+			Email:       userSession.email,
+		},
+	)
+
+	for _, card := range flashcards {
+		_, err := s.Db.CreateFlashcard(
+			context.Background(),
+			database.CreateFlashcardParams{
+				SetID: setID,
+				Front: card.Front,
+				Back:  card.Back,
+			},
+		)
 		if err != nil {
-			log.Printf("Error creating set: %v", err)
-		}
-
-		data, err := json.Marshal(flashcards)
-		if err != nil {
-			log.Printf("Failed to marshal JSON response: %v", flashcards)
-			w.WriteHeader(500)
+			log.Printf("Error creating flashcard: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-
-		w.Header().Add("Content-type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write(data)
 	}
-}*/
+
+	response := struct {
+		SetID uuid.UUID `json:"setID"`
+	}{
+		SetID: setID,
+	}
+
+	w.Header().Add("Content-type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
 
 func (s *State) TestFlashcardGetHandler(w http.ResponseWriter, req *http.Request) {
 	data, err := s.Db.GetAllFlashcards(context.Background())
