@@ -1,35 +1,29 @@
-// ChapterList.jsx
 import React from 'react';
+import ChapterCard from './ChapterCard';
 import './ChapterList.css';
 
-function ChapterCard({ chapter, cardCount }) {
-    return (
-        <div className="card">
-            <h2 className="chapter-title">{chapter}</h2>
-            <p className="card-count">{cardCount} Cards</p>
-            <div className="actions">
-                <button className="button">All Flashcards</button>
-                <button className="button">Next</button>
-                <button className="button">Discussion Board</button>
-            </div>
-        </div>
-    );
-}
+const chapters = [
+  { title: 'Chapter 1', cardCount: 33 },
+  { title: 'Chapter 2', cardCount: 45 },
+  { title: 'Chapter 3', cardCount: 27 }
+];
 
-function ChapterList() {
-    const chapters = [
-        { chapter: 'Chapter 1', cardCount: 33 },
-        { chapter: 'Chapter 2', cardCount: 45 },
-        { chapter: 'Chapter 3', cardCount: 27 },
-    ];
-
-    return (
-        <section className="chapter-list">
-            {chapters.map((ch, index) => (
-                <ChapterCard key={index} chapter={ch.chapter} cardCount={ch.cardCount} />
-            ))}
-        </section>
-    );
-}
+const ChapterList = () => {
+  return (
+    <div className="chapter-list">
+      <h2>Chapters</h2>
+      {chapters.map((chapter, index) => (
+        <ChapterCard 
+          key={index} 
+          chapterTitle={chapter.title} 
+          cardCount={chapter.cardCount} 
+        />
+      ))}
+      <div className="chapter-navigation">
+        <button className="nav-button">Next</button>
+      </div>
+    </div>
+  );
+};
 
 export default ChapterList;

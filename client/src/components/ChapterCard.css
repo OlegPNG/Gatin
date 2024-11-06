@@ -1,0 +1,62 @@
+.chapter-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    background-color: #eaf4ff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chapter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .chapter-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chapter-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1f6dd6;
+  }
+  
+  .card-count {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .options-icon {
+    font-size: 1.2rem;
+    color: #888;
+    cursor: pointer;
+  }
+  
+  .chapter-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .action-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #1f6dd6;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .action-button:hover {
+    background-color: #145cb8;
+  }
+  

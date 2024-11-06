@@ -1,63 +1,79 @@
-/* ChapterList.css */
-
 .chapter-list {
   padding: 1rem;
 }
 
-.card {
-  border: 1px solid #ddd;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s ease-in-out;
-}
-
-.card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Increased shadow on hover */
-}
-
-.chapter-title {
-  font-size: 1.2rem;
-  margin: 0 0 0.5rem 0;
+h2 {
+  font-size: 1.8rem;
   font-weight: bold;
-}
-
-.card-count {
-  font-size: 0.9rem;
-  color: #555;
   margin-bottom: 1rem;
 }
 
-.actions {
+.chapter-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.nav-button {
+  background-color: #1f6dd6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: #145cb8;
+}
+
+.chapter-card {
   display: flex;
   justify-content: space-between;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #e8f4ff;
   margin-bottom: 1rem;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chapter-info {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1e40af;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .button {
-  flex: 1;
-  padding: 0.7rem 1rem;
-  font-size: 0.9rem;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  text-align: center;
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.2s;
+  font-weight: bold;
 }
 
 .button:hover {
-  background-color: #e0e0e0;
-  color: #000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  background-color: #2563eb;
 }
 
-.button:active {
-  background-color: #d4d4d4;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
+.menu-icon {
+  margin-left: auto;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.menu-icon:hover {
+  color: #3b82f6;
 }
