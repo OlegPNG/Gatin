@@ -1,0 +1,91 @@
+/* Container to center the flashcard vertically and horizontally */
+.flashcard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh; /* Takes up most of the viewport height */
+}
+
+/* Flashcard styling */
+.flashcard {
+  width: 300px;
+  height: 200px;
+  position: relative;
+  perspective: 1000px; /* Creates 3D perspective for flipping effect */
+  cursor: pointer;
+  margin-bottom: 20px;
+  list-style: none; /* Removes list bullet points */
+}
+
+.flashcard .front, .flashcard .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden; /* Hides the backface when flipped */
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.6s; /* Smooth flipping transition */
+}
+
+.flashcard .front {
+  background-color: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.flashcard .back {
+  background-color: #d3e0ea;
+  transform: rotateY(180deg); /* Starts flipped */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.flipped .front {
+  transform: rotateY(180deg); /* Flips the front side */
+}
+
+.flipped .back {
+  transform: rotateY(0); /* Flips the back side */
+}
+
+/* Flashcard navigation buttons */
+.flashcard-nav {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.flashcard-nav button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.flashcard-nav button:hover {
+  background-color: #0056b3;
+}
+
+/* Adjustments for small screens */
+@media (max-width: 500px) {
+  .flashcard {
+    width: 250px;
+    height: 180px;
+  }
+
+  .flashcard-nav button {
+    padding: 8px 16px;
+  }
+}
