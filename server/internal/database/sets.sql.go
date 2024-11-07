@@ -59,23 +59,28 @@ func (q *Queries) GetSetOwner(ctx context.Context, id uuid.UUID) (string, error)
 }
 
 const getSetsByAccount = `-- name: GetSetsByAccount :many
-SELECT id FROM sets
+SELECT id, title, description, email FROM sets
 WHERE (email = $1)
 `
 
-func (q *Queries) GetSetsByAccount(ctx context.Context, email string) ([]uuid.UUID, error) {
+func (q *Queries) GetSetsByAccount(ctx context.Context, email string) ([]Set, error) {
 	rows, err := q.db.Query(ctx, getSetsByAccount, email)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []uuid.UUID
+	var items []Set
 	for rows.Next() {
-		var id uuid.UUID
-		if err := rows.Scan(&id); err != nil {
+		var i Set
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Description,
+			&i.Email,
+		); err != nil {
 			return nil, err
 		}
-		items = append(items, id)
+		items = append(items, i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

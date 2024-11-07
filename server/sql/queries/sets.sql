@@ -9,7 +9,7 @@ VALUES (
 RETURNING *;
 
 -- name: GetSetsByAccount :many
-SELECT id FROM sets
+SELECT * FROM sets
 WHERE (email = $1);
 
 -- name: GetSetOwner :one

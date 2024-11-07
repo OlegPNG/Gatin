@@ -100,7 +100,7 @@ func (s *State) SetGetHandler(w http.ResponseWriter, req *http.Request) {
 
 	// Creates struct to generate json response from, contains list of ids
 	setResponse := struct {
-		Sets []uuid.UUID `json:"sets"`
+		Sets []database.Set `json:"sets"`
 	}{Sets: sets}
 
 	raw, err := json.Marshal(setResponse)
