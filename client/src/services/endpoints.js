@@ -1,73 +1,81 @@
-// services/endpoints.js
-
 const BASE_URL = '/api';
 
-const sendRequest = async (url, options = {}) => {
-  try {
-    const response = await fetch(url, options);
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || 'Request failed');
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
 const endpoints = {
-  getFlashcardsBySetId: async (setId) => {
-    return sendRequest(`${BASE_URL}/flashcards?set=${setId}`);
-  },
-
-  registerUser: async (credentials) => {
-    return sendRequest(`${BASE_URL}/register`, {
+  signInUser: async (data) => {
+    const response = await fetch(`${BASE_URL}/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials),
+      body: JSON.stringify(data),
     });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
   },
 
-  signInUser: async (credentials) => {
-    return sendRequest(`${BASE_URL}/signin`, {
+  registerUser: async (data) => {
+    const response = await fetch(`${BASE_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials),
+      body: JSON.stringify(data),
     });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
   },
 
-  getSets: async () => {
-    return sendRequest(`${BASE_URL}/sets`, { method: 'GET' });
+  getUserSets: async () => {
+    const response = await fetch(`${BASE_URL}/sets`);
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
   },
 
-  createSet: async (setData) => {
-    return sendRequest(`${BASE_URL}/sets`, {
+  createSet: async (data) => {
+    const response = await fetch(`${BASE_URL}/sets`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(setData),
+      body: JSON.stringify(data),
     });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
   },
 
-  generateFlashcards: async (fileData) => {
-    return sendRequest(`${BASE_URL}/generate`, {
+  generateFlashcards: async (data) => {
+    const response = await fetch(`${BASE_URL}/generate`, {
       method: 'POST',
-      body: fileData,  // expects FormData for file uploads
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
     });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
   },
 
   generateQuiz: async (setId) => {
-    return sendRequest(`${BASE_URL}/quiz`, {
-      method: 'POST',
+    const response = await fetch(`${BASE_URL}/quiz?setId=${setId}`, { // changed to GET with query parameter
+      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ setId }),
     });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
   },
 
-  insertFlashcards: async (setId, flashcards) => {
-    return sendRequest(`${BASE_URL}/flashcards`, {
+  getFlashcardsBySetId: async (setId) => {
+    const response = await fetch(`${BASE_URL}/flashcards?setId=${setId}`); // Ensure this matches backend query param handling
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
+  },
+
+  insertFlashcards: async (data) => {
+    const response = await fetch(`${BASE_URL}/flashcards`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ setId, flashcards }),
+      body: JSON.stringify(data),
     });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
+  },
+
+  getQuizzes: async () => {
+    const response = await fetch(`${BASE_URL}/quizzes`);
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
   },
 };
 
