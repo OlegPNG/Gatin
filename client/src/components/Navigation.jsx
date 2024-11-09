@@ -1,18 +1,14 @@
-// Navigation.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Navigation.css';
 
-function Navigation() {
+export default function Navigation() {
+  const navigate = useNavigate();
+
   return (
     <nav className="navigation">
-      <Link to="/">Upload</Link>
-      <Link to="/flashcards">Flashcards</Link>
-      <Link to="/quizzes">Quizzes</Link>
-      <Link to="/matching">Matching</Link> {/* Add Matching link */}
+      <button onClick={() => navigate("/sets")}>Go to Sets</button>
+      <button onClick={() => navigate("/create-set")}>Create New Set</button>
     </nav>
   );
 }
-
-export default Navigation;
-

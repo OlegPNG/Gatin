@@ -1,26 +1,26 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Add Router here
-import Navigation from './components/Navigation';
-import UploadForm from './components/UploadForm';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
+import Sets from './components/Sets';
+import CreateSet from './components/CreateSet';
 import Flashcards from './components/Flashcards';
 import Quizzes from './components/Quizzes';
-import Matching from './components/Matching'; // Import Matching component
-import './styles/App.css';
+import Matching from './components/Matching';
 
-function App() {
+export default function App() {
   return (
     <Router>
-      <div className="app-container">
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<UploadForm />} />
-          <Route path="/flashcards" element={<Flashcards />} />
-          <Route path="/quizzes" element={<Quizzes />} />
-          <Route path="/matching" element={<Matching />} /> {/* Add Matching route */}
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<LoginForm />} />
+        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/sets" element={<Sets />} />
+        <Route path="/create-set" element={<CreateSet />} />
+        <Route path="/flashcards/:setId" element={<Flashcards />} />
+        <Route path="/quizzes/:setId" element={<Quizzes />} />
+        <Route path="/matching/:setId" element={<Matching />} />
+      </Routes>
     </Router>
   );
 }
 
-export default App;
