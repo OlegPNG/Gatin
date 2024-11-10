@@ -23,8 +23,14 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 func (s *State) setupHandlers() {
 	//s.R.Post("/api/flashcard", s.TestFlashcardPostHandler)
+
+	s.R.Options("/*", s.OptionsHandler)
 
 	s.R.Get("/api/flashcard", s.TestFlashcardGetHandler)
 	s.R.Get("/api/sets", s.SetGetHandler)
@@ -43,6 +49,10 @@ func (s *State) setupHandlers() {
 	s.R.Post("/api/generate", s.GeneratePostHandler)
 	s.R.Get("/api/quiz", s.QuizGetHandler)
 
+}
+
+func (s *State) OptionsHandler(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
 
 // Creates Sets
@@ -447,6 +457,8 @@ func (s *State) SigninHandler(w http.ResponseWriter, r *http.Request) {
 		email:  creds.Email,
 		expiry: expiresAt,
 	}
+
+	//enableCors(&w)
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_token",

@@ -9,11 +9,11 @@ export default function Sets() {
 
   useEffect(() => {
     async function fetchSets() {
+      try {
       const response = await endpoints.getUserSets();
-      if (response.success) {
-        setSets(response.data);
-      } else {
-        alert('Failed to load sets.');
+      setSets(response.data);
+      } catch (error) {
+        alert('Failed to load sets. ' + error);
       }
     }
     fetchSets();
@@ -29,21 +29,32 @@ export default function Sets() {
     }
   };
 
-  return (
-    <div className="sets-page">
-      <h2>Your Sets</h2>
-      <button onClick={() => navigate('/create-set')}>Create New Set</button>
-      <div className="sets-list">
-        {sets.map((set) => (
-          <div key={set.id} className="set-item">
-            <h3>{set.name}</h3>
-            <p>{set.description}</p>
-            <button onClick={() => handleGenerate('flashcards', set.id)}>Generate Flashcards</button>
-            <button onClick={() => handleGenerate('quizzes', set.id)}>Generate Quiz</button>
-            <button onClick={() => handleGenerate('matching', set.id)}>Generate Matching</button>
-          </div>
-        ))}
+  if(sets) {
+    return (
+      <div className="sets-page">
+        <h2>Your Sets</h2>
+        <button onClick={() => navigate('/create-set')}>Create New Set</button>
+        <div className="sets-list">
+          {sets.map((set) => (
+            <div key={set.id} className="set-item">
+              <h3>{set.name}</h3>
+              <p>{set.description}</p>
+              <button onClick={() => handleGenerate('flashcards', set.id)}>Generate Flashcards</button>
+              <button onClick={() => handleGenerate('quizzes', set.id)}>Generate Quiz</button>
+              <button onClick={() => handleGenerate('matching', set.id)}>Generate Matching</button>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="sets-page">
+        <h2>Your Sets</h2>
+        <button onClick={() => navigate('/create-set')}>Create New Set</button>
+        <div className="sets-list">
+        </div>
+      </div>
+    );
+  }
 }

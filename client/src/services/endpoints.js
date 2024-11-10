@@ -1,10 +1,11 @@
-const BASE_URL = 'https://gatin.dev/api';
+const BASE_URL = '/api';
 
 const endpoints = {
   signInUser: async (data) => {
     const response = await fetch(`${BASE_URL}/signin`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response;
