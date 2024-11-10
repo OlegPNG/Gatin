@@ -10,11 +10,15 @@ export default function LoginForm() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    const response = await endpoints.signInUser({ email, password });
-    if (response.success) {
-      navigate('/sets');
-    } else {
-      alert('Login failed. Please check your credentials.');
+    try {
+      const response = await endpoints.signInUser({ email, password });
+      if (response.ok) {
+        navigate('/sets');
+      } else {
+        alert('Login failed. Please check your credentials.');
+      }
+    } catch(error) {
+      alert('Login failed. ' + error)
     }
   };
 
