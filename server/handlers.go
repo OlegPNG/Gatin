@@ -23,8 +23,14 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 func (s *State) setupHandlers() {
 	//s.R.Post("/api/flashcard", s.TestFlashcardPostHandler)
+
+	s.R.Options("/*", s.OptionsHandler)
 
 	s.R.Get("/api/flashcard", s.TestFlashcardGetHandler)
 	s.R.Get("/api/sets", s.SetGetHandler)
@@ -45,6 +51,10 @@ func (s *State) setupHandlers() {
 
 }
 
+func (s *State) OptionsHandler(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
 // Creates Sets
 func (s *State) SetPostHandler(w http.ResponseWriter, req *http.Request) {
 	userSession, err := s.validateSessionToken(req)
@@ -62,8 +72,8 @@ func (s *State) SetPostHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	body := struct {
-		title       string
-		description string
+		Title       string
+		Description string
 	}{}
 
 	err = json.Unmarshal(raw, &body)
@@ -77,8 +87,8 @@ func (s *State) SetPostHandler(w http.ResponseWriter, req *http.Request) {
 		context.Background(),
 		database.CreateSetParams{
 			ID:          uuid.New(),
-			Title:       body.title,
-			Description: body.description,
+			Title:       body.Title,
+			Description: body.Description,
 			Email:       userSession.email,
 		},
 	)
@@ -413,6 +423,7 @@ func (s *State) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	if _, err = s.Db.RegisterAccount(context.Background(), database.RegisterAccountParams{
 		Email: creds.Email, Password: string(hashedPassword),
 	}); err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -447,6 +458,8 @@ func (s *State) SigninHandler(w http.ResponseWriter, r *http.Request) {
 		email:  creds.Email,
 		expiry: expiresAt,
 	}
+
+	//enableCors(&w)
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_token",
