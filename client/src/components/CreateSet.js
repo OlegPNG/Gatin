@@ -4,13 +4,20 @@ import '../styles/CreateSet.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateSet() {
-  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
 
   const handleFileUpload = (e) => {
-    setFile(e.target.files[0]);
+    var file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (foo) => {
+      setFile(foo.target.result);
+    };
+    //setFile(e.target.files[0]);
+    reader.readAsText(file);
+    console.log('File Content: ' + file)
   };
 
   const handleCreateSet = async () => {
@@ -20,16 +27,16 @@ export default function CreateSet() {
     }
 
     const formData = new FormData();
-    formData.append('name', name);
+    formData.append('title', title);
     formData.append('description', description);
     formData.append('file', file);
 
-    const response = await endpoints.generateFlashcards(formData);
-    if (response.success) {
+    try {
+      const response = await endpoints.generateFlashcards(formData);
       alert('Flashcards generated successfully!');
       navigate('/sets');
-    } else {
-      alert('Failed to generate flashcards.');
+    } catch(error) {
+      alert('Failed to generate flashcards. ' + error);
     }
   };
 
@@ -38,9 +45,9 @@ export default function CreateSet() {
       <h2>Create New Set</h2>
       <input
         type="text"
-        placeholder="Set Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        placeholder="Set Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
       <textarea
         placeholder="Set Description"

@@ -39,10 +39,14 @@ const endpoints = {
   },
 
   generateFlashcards: async (data) => {
+    var object = {};
+    data.forEach((value, key) => object[key] = value);
+    var json = JSON.stringify(object);
+    console.log(json)
     const response = await fetch(`${BASE_URL}/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: json,
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response.json();
