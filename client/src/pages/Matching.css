@@ -1,0 +1,52 @@
+/* src/pages/Matching.css */
+
+.matching-page {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .completion-message {
+    font-size: 20px;
+    color: #4CAF50;
+    margin-top: 20px;
+  }
+  
+  .matching-container {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .terms-column, .definitions-column {
+    width: 200px;
+  }
+  
+  .term-item, .definition-item {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .term-item.matched {
+    background-color: #c8e6c9;
+    cursor: default;
+  }
+  
+  .definition-item.matched {
+    background-color: #c8e6c9;
+    color: #555;
+    text-decoration: line-through;
+    cursor: default;
+  }
+  
+  .definition-item.hovered {
+    background-color: #e3f2fd;
+  }
+  
