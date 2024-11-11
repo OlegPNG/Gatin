@@ -10,12 +10,12 @@ export default function RegisterForm() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    const response = await endpoints.registerUser({ email, password });
-    if (response.success) {
+    try {
+      const response = await endpoints.registerUser({ email, password });
       alert('Registration successful! Please log in.');
       navigate('/');
-    } else {
-      alert('Registration failed. Please try again.');
+    } catch(error) {
+      alert('Registration failed. Please try again: ' + error);
     }
   };
 

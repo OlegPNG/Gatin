@@ -11,7 +11,7 @@ export default function Sets() {
     async function fetchSets() {
       try {
       const response = await endpoints.getUserSets();
-      setSets(response.data);
+      setSets(response.sets);
       } catch (error) {
         alert('Failed to load sets. ' + error);
       }
@@ -21,7 +21,7 @@ export default function Sets() {
 
   const handleGenerate = (type, setId) => {
     if (type === 'flashcards') {
-      navigate(`/flashcards/${setId}`);
+      navigate(`/flashcards`,{ state: { id: setId } });
     } else if (type === 'quizzes') {
       navigate(`/quizzes/${setId}`);
     } else if (type === 'matching') {
@@ -29,7 +29,11 @@ export default function Sets() {
     }
   };
 
-  if(sets) {
+  if(sets !== null) {
+    //console.log("Number of sets: " + sets.length)
+    /*if(sets[0] !== undefined) {
+      console.log("Set Id: " + sets[0].id)
+    }*/
     return (
       <div className="sets-page">
         <h2>Your Sets</h2>
@@ -37,7 +41,7 @@ export default function Sets() {
         <div className="sets-list">
           {sets.map((set) => (
             <div key={set.id} className="set-item">
-              <h3>{set.name}</h3>
+              <h3>{set.title}</h3>
               <p>{set.description}</p>
               <button onClick={() => handleGenerate('flashcards', set.id)}>Generate Flashcards</button>
               <button onClick={() => handleGenerate('quizzes', set.id)}>Generate Quiz</button>

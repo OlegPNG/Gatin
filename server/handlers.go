@@ -72,8 +72,8 @@ func (s *State) SetPostHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	body := struct {
-		title       string
-		description string
+		Title       string
+		Description string
 	}{}
 
 	err = json.Unmarshal(raw, &body)
@@ -87,8 +87,8 @@ func (s *State) SetPostHandler(w http.ResponseWriter, req *http.Request) {
 		context.Background(),
 		database.CreateSetParams{
 			ID:          uuid.New(),
-			Title:       body.title,
-			Description: body.description,
+			Title:       body.Title,
+			Description: body.Description,
 			Email:       userSession.email,
 		},
 	)
@@ -423,6 +423,7 @@ func (s *State) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	if _, err = s.Db.RegisterAccount(context.Background(), database.RegisterAccountParams{
 		Email: creds.Email, Password: string(hashedPassword),
 	}); err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

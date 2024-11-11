@@ -23,6 +23,7 @@ const endpoints = {
 
   getUserSets: async () => {
     const response = await fetch(`${BASE_URL}/sets`);
+    console.log(response)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response.json();
   },
@@ -57,7 +58,7 @@ const endpoints = {
   },
 
   getFlashcardsBySetId: async (setId) => {
-    const response = await fetch(`${BASE_URL}/flashcards?setId=${setId}`); // Ensure this matches backend query param handling
+    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`); // Ensure this matches backend query param handling
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response.json();
   },
