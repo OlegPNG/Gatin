@@ -33,8 +33,12 @@ export default function CreateSet() {
 
     try {
       const response = await endpoints.generateFlashcards(formData);
-      alert('Flashcards generated successfully!');
-      navigate('/sets');
+      if (response.status !== 401) {
+        alert('Flashcards generated successfully!');
+        navigate('/sets');
+      } else {
+        navigate('/');
+      };
     } catch(error) {
       alert('Failed to generate flashcards. ' + error);
     }
