@@ -1,4 +1,4 @@
-const BASE_URL = '/api';
+const BASE_URL = 'https://www.gatin.dev/api';
 
 const endpoints = {
   signInUser: async (data) => {
