@@ -60,10 +60,6 @@ function Flashcards() {
         <Navigation />
         <h1>Flashcards</h1>
         <div className="flashcard-placeholder">No flashcard available</div>
-        <div className="flashcard-nav">
-          <button onClick={handleBack}>Back</button>
-          <button onClick={handleNext}>Next</button>
-        </div>
       </div>
     );
   }

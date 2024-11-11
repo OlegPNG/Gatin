@@ -29,7 +29,7 @@ export default function CreateSet() {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
-    formData.append('file', file);
+    formData.append('notes', file);
 
     try {
       const response = await endpoints.generateFlashcards(formData);

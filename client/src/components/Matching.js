@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navigation from './Navigation';
 import endpoints from '../services/endpoints.js'; // Default import of endpoints
 import '../styles/Matching.css';
+import { useLocation } from 'react-router-dom';
 
 function Matching() {
   const [flashcards, setFlashcards] = useState([]);
@@ -11,14 +12,17 @@ function Matching() {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [matchedPairs, setMatchedPairs] = useState([]);
 
+
+  const { state } = useLocation();
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
-        const setId = 'YOUR_SET_ID'; // Replace with actual set ID
+        const setId = state.id; // Replace with actual set ID
         const data = await endpoints.getFlashcardsBySetId(setId); // Use default import
-        setFlashcards(data);
-        setQuestions(shuffleArray(data.map(card => card.front)));
-        setAnswers(shuffleArray(data.map(card => card.back)));
+        const fc = data.flashcards
+        setFlashcards(fc);
+        setQuestions(shuffleArray(fc.map(card => card.front)));
+        setAnswers(shuffleArray(fc.map(card => card.back)));
       } catch (err) {
         setError(err.message);
       }

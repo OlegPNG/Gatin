@@ -17,8 +17,8 @@ export default function App() {
         <Route path="/sets" element={<Sets />} />
         <Route path="/create-set" element={<CreateSet />} />
         <Route path="/flashcards" element={<Flashcards />} />
-        <Route path="/quizzes/:setId" element={<Quizzes />} />
-        <Route path="/matching/:setId" element={<Matching />} />
+        <Route path="/quizzes" element={<Quizzes />} />
+        <Route path="/matching" element={<Matching />} />
       </Routes>
     </Router>
   );

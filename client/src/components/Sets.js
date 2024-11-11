@@ -10,8 +10,13 @@ export default function Sets() {
   useEffect(() => {
     async function fetchSets() {
       try {
-      const response = await endpoints.getUserSets();
-      setSets(response.sets);
+        const response = await endpoints.getUserSets();
+        if(response.status !== 401) {
+          const data = await response.json()
+          setSets(data.sets);
+        } else {
+          navigate('/')
+        }
       } catch (error) {
         alert('Failed to load sets. ' + error);
       }
@@ -25,7 +30,7 @@ export default function Sets() {
     } else if (type === 'quizzes') {
       navigate(`/quizzes/${setId}`);
     } else if (type === 'matching') {
-      navigate(`/matching/${setId}`);
+      navigate(`/matching`, { state: { id: setId } });
     }
   };
 
@@ -43,7 +48,7 @@ export default function Sets() {
             <div key={set.id} className="set-item">
               <h3>{set.title}</h3>
               <p>{set.description}</p>
-              <button onClick={() => handleGenerate('flashcards', set.id)}>Generate Flashcards</button>
+              <button onClick={() => handleGenerate('flashcards', set.id)}>View Flashcards</button>
               <button onClick={() => handleGenerate('quizzes', set.id)}>Generate Quiz</button>
               <button onClick={() => handleGenerate('matching', set.id)}>Generate Matching</button>
             </div>

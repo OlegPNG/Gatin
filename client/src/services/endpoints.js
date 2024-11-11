@@ -18,14 +18,14 @@ const endpoints = {
       body: JSON.stringify(data),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    return response.json();
+    return response;
   },
 
   getUserSets: async () => {
     const response = await fetch(`${BASE_URL}/sets`);
     console.log(response)
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    return response.json();
+    if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response;
   },
 
   createSet: async (data) => {
@@ -41,6 +41,7 @@ const endpoints = {
   generateFlashcards: async (data) => {
     var object = {};
     data.forEach((value, key) => object[key] = value);
+    object["preferences"] = {}
     var json = JSON.stringify(object);
     console.log(json)
     const response = await fetch(`${BASE_URL}/generate`, {
@@ -53,7 +54,7 @@ const endpoints = {
   },
 
   generateQuiz: async (setId) => {
-    const response = await fetch(`${BASE_URL}/quiz?setId=${setId}`, { // changed to GET with query parameter
+    const response = await fetch(`${BASE_URL}/quiz?set=${setId}`, { // changed to GET with query parameter
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
