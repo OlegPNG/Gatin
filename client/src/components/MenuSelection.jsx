@@ -1,5 +1,6 @@
 // src/components/MenuSelection.jsx
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 import './MenuSelection.css';
 
 function MenuSelection() {
@@ -7,10 +8,9 @@ function MenuSelection() {
     <div className="menu-selection">
       <h3>Menu Selection</h3>
       <ul>
-        <li><a href="#flashcards">Flashcards</a></li>
-        <li><a href="#matching">Matching</a></li>
-        <li><a href="#quizzes">Quizzes</a></li>
-        <li><a href="#classroom">Classroom</a></li>
+        <li><Link to="/flashcards">Flashcards</Link></li>
+        <li><Link to="/matching">Matching</Link></li>
+        <li><Link to="/quizzes">Quizzes</Link></li> {/* Link to the Quizzes page */}
       </ul>
     </div>
   );
