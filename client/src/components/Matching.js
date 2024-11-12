@@ -19,7 +19,8 @@ function Matching() {
       try {
         const setId = state.id; // Replace with actual set ID
         const data = await endpoints.getFlashcardsBySetId(setId); // Use default import
-        const fc = data.flashcards
+        const object = await data.json()
+        const fc = object.flashcards
         setFlashcards(fc);
         setQuestions(shuffleArray(fc.map(card => card.front)));
         setAnswers(shuffleArray(fc.map(card => card.back)));
