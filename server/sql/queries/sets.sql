@@ -18,3 +18,6 @@ WHERE (id = $1);
 
 -- name: DeleteSet :exec
 DELETE FROM sets WHERE (id = $1);
+
+-- name: EditSet :exec
+UPDATE sets SET title = $2, description = $3 WHERE (set_id = $1);
