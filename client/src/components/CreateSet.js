@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import endpoints from '../services/endpoints';
+import '../styles/CreateSet.css';
 
 export default function CreateSet() {
   const [title, setTitle] = useState('');
