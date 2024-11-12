@@ -29,13 +29,13 @@ func (s *State) setupHandlers() {
 	s.R.Get("/api/sets", s.SetGetHandler)
 	s.R.Post("/api/sets", s.SetPostHandler)
 	//NEW
-	s.R.Delete("/api/edit", s.SetDeleteHandler)
+	s.R.Delete("/api/sets", s.SetDeleteHandler)
 
 	s.R.Get("/api/flashcards", s.FlashcardGetHandler)
 	s.R.Post("/api/flashcards", s.FlashcardPostHandler)
 	//NEW
-	s.R.Post("/api/edit", s.FlashcardEditHandler)
-	s.R.Delete("/api/flashcard", s.FlashcardDeleteHandler)
+	s.R.Post("/api/flashcards/edit", s.FlashcardEditHandler)
+	s.R.Delete("/api/flashcards", s.FlashcardDeleteHandler)
 
 	s.R.Post("/api/register", s.RegisterHandler)
 	s.R.Post("/api/signin", s.SigninHandler)
