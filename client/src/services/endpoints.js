@@ -37,8 +37,8 @@ const endpoints = {
       credentials: 'include',
       body: JSON.stringify(data),
     });
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    return response.json();
+    if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response;
   },
 
   generateFlashcards: async (data) => {
@@ -53,8 +53,8 @@ const endpoints = {
       credentials: 'include',
       body: json,
     });
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    return response.json();
+    if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response;
   },
 
   generateQuiz: async (setId) => {
@@ -68,10 +68,16 @@ const endpoints = {
   },
 
   getFlashcardsBySetId: async (setId) => {
+<<<<<<< HEAD
     const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`, { credentials: 'include' }); 
     // Ensure this matches backend query param handling
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response.json();
+=======
+    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`); // Ensure this matches backend query param handling
+    if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response;
+>>>>>>> ba39736e3e686ac891eaaa8b3beac619a57fb531
   },
 
   insertFlashcards: async (data) => {

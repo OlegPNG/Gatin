@@ -17,8 +17,11 @@ function Flashcards() {
     const fetchFlashcards = async () => {
       try {
         const setId = state.id; // Replace with actual set ID
-        const data = await endpoints.getFlashcardsBySetId(setId); // Use default import
-        setFlashcards(data.flashcards);
+        const response = await endpoints.getFlashcardsBySetId(setId); // Use default import
+        if (response.status !== 401) {
+          const data = await response.json()
+          setFlashcards(data.flashcards);
+        }
       } catch (err) {
         setError(err.message);
       }
