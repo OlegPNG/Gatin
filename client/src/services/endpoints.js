@@ -5,6 +5,7 @@ const endpoints = {
     const response = await fetch(`${BASE_URL}/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(data)
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -15,6 +16,7 @@ const endpoints = {
     const response = await fetch(`${BASE_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(data),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -22,7 +24,7 @@ const endpoints = {
   },
 
   getUserSets: async () => {
-    const response = await fetch(`${BASE_URL}/sets`);
+    const response = await fetch(`${BASE_URL}/sets`, { credentials: 'include' });
     console.log(response)
     if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
     return response;
@@ -32,6 +34,7 @@ const endpoints = {
     const response = await fetch(`${BASE_URL}/sets`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(data),
     });
     if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -47,6 +50,7 @@ const endpoints = {
     const response = await fetch(`${BASE_URL}/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: json,
     });
     if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -57,21 +61,30 @@ const endpoints = {
     const response = await fetch(`${BASE_URL}/quiz?set=${setId}`, { // changed to GET with query parameter
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response.json();
   },
 
   getFlashcardsBySetId: async (setId) => {
+<<<<<<< HEAD
+    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`, { credentials: 'include' }); 
+    // Ensure this matches backend query param handling
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
+=======
     const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`); // Ensure this matches backend query param handling
     if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
     return response;
+>>>>>>> ba39736e3e686ac891eaaa8b3beac619a57fb531
   },
 
   insertFlashcards: async (data) => {
     const response = await fetch(`${BASE_URL}/flashcards`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(data),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -79,7 +92,7 @@ const endpoints = {
   },
 
   getQuizzes: async () => {
-    const response = await fetch(`${BASE_URL}/quizzes`);
+    const response = await fetch(`${BASE_URL}/quizzes`, { credentials: 'include' });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response.json();
   },
