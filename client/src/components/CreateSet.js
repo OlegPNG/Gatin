@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
-import endpoints from '../services/endpoints';
-import '../styles/CreateSet.css';
 import { useNavigate } from 'react-router-dom';
+import endpoints from '../services/endpoints';
 
 export default function CreateSet() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
+  const [flashcardType, setFlashcardType] = useState('regular'); // Define flashcardType state
   const navigate = useNavigate();
 
   const handleFileUpload = (e) => {
-    var file = e.target.files[0];
+    const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = (foo) => {
       setFile(foo.target.result);
     };
-    //setFile(e.target.files[0]);
     reader.readAsText(file);
-    console.log('File Content: ' + file)
+    console.log('File Content: ' + file);
   };
 
   const handleCreateSet = async () => {
@@ -26,22 +25,30 @@ export default function CreateSet() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('notes', file);
+    // Create a simple JavaScript object with the required data
+    const requestData = {
+      title,
+      description,
+      notes: file,
+      flashcardType,
+    };
 
     try {
-      const response = await endpoints.generateFlashcards(formData);
+      const response = await endpoints.generateFlashcards(requestData);
       if (response.status !== 401) {
         alert('Flashcards generated successfully!');
         navigate('/sets');
       } else {
         navigate('/');
-      };
-    } catch(error) {
+      }
+    } catch (error) {
       alert('Failed to generate flashcards. ' + error);
     }
+  };
+
+  const handleToggle = () => {
+    // Toggle between 'regular' and 'qa' types
+    setFlashcardType((prevType) => (prevType === 'regular' ? 'qa' : 'regular'));
   };
 
   return (
@@ -59,6 +66,9 @@ export default function CreateSet() {
         onChange={(e) => setDescription(e.target.value)}
       />
       <input type="file" accept=".md,.txt" onChange={handleFileUpload} />
+      <button onClick={handleToggle}>
+        Toggle Flashcard Type: {flashcardType === 'regular' ? 'Regular' : 'Question & Answer'}
+      </button>
       <button onClick={handleCreateSet}>Create Set</button>
     </div>
   );
