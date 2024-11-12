@@ -28,11 +28,12 @@ func (s *State) setupHandlers() {
 	s.R.Get("/api/flashcard", s.TestFlashcardGetHandler)
 	s.R.Get("/api/sets", s.SetGetHandler)
 	s.R.Post("/api/sets", s.SetPostHandler)
+	//NEW
 	s.R.Delete("/api/edit", s.SetDeleteHandler)
 
 	s.R.Get("/api/flashcards", s.FlashcardGetHandler)
 	s.R.Post("/api/flashcards", s.FlashcardPostHandler)
-	//
+	//NEW
 	s.R.Post("/api/edit", s.FlashcardEditHandler)
 	s.R.Delete("/api/flashcard", s.FlashcardDeleteHandler)
 
@@ -163,6 +164,8 @@ func (s *State) SetDeleteHandler(w http.ResponseWriter, req *http.Request) {
 		}*/
 
 	s.Db.DeleteSet(context.Background(), set_id)
+
+	w.WriteHeader(http.StatusOK)
 
 }
 
@@ -634,10 +637,9 @@ func (s *State) FlashcardEditHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	body := struct {
-		setID uuid.UUID
-		id    int
-		front string
-		back  string
+		Id    int    `json:"id"`
+		Front string `json:"front"`
+		Back  string `json:"back"`
 	}{}
 
 	err = json.Unmarshal(raw, &body)
@@ -647,14 +649,13 @@ func (s *State) FlashcardEditHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	//is the ID ok?
 	s.Db.EditFlashcards(
 		context.Background(),
 		database.EditFlashcardsParams{
-			SetID: body.setID,
-			ID:    int32(body.id),
-			Front: body.front,
-			Back:  body.back,
+			SetID: set_id,
+			ID:    int32(body.Id),
+			Front: body.Front,
+			Back:  body.Back,
 		},
 	)
 
@@ -696,8 +697,7 @@ func (s *State) FlashcardDeleteHandler(w http.ResponseWriter, req *http.Request)
 	}
 
 	body := struct {
-		setID uuid.UUID
-		id    int64
+		Id int `json:"id"`
 	}{}
 
 	err = json.Unmarshal(raw, &body)
@@ -710,8 +710,8 @@ func (s *State) FlashcardDeleteHandler(w http.ResponseWriter, req *http.Request)
 	s.Db.DeleteFlashcards(
 		context.Background(),
 		database.DeleteFlashcardsParams{
-			SetID: body.setID,
-			ID:    int32(body.id),
+			SetID: set_id,
+			ID:    int32(body.Id),
 		},
 	)
 
