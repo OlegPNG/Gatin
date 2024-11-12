@@ -25,13 +25,16 @@ type Credentials struct {
 
 func (s *State) setupHandlers() {
 	//s.R.Post("/api/flashcard", s.TestFlashcardPostHandler)
-
 	s.R.Get("/api/flashcard", s.TestFlashcardGetHandler)
 	s.R.Get("/api/sets", s.SetGetHandler)
 	s.R.Post("/api/sets", s.SetPostHandler)
+	s.R.Delete("/api/edit", s.SetDeleteHandler)
 
 	s.R.Get("/api/flashcards", s.FlashcardGetHandler)
 	s.R.Post("/api/flashcards", s.FlashcardPostHandler)
+	//
+	s.R.Post("/api/edit", s.FlashcardEditHandler)
+	s.R.Delete("/api/flashcard", s.FlashcardDeleteHandler)
 
 	s.R.Post("/api/register", s.RegisterHandler)
 	s.R.Post("/api/signin", s.SigninHandler)
@@ -111,6 +114,56 @@ func (s *State) SetGetHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	w.Write(raw)
+}
+
+func (s *State) SetDeleteHandler(w http.ResponseWriter, req *http.Request) {
+	userSession, err := s.validateSessionToken(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	set := req.URL.Query().Get("set")
+	set_id, err := uuid.Parse(set)
+	if err != nil {
+		log.Println("SetDeleteHandler error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	dbEmail, err := s.Db.GetSetOwner(context.Background(), set_id)
+	if err != nil {
+		log.Println("SetDeleteHandler error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if userSession.email != dbEmail {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	/*
+		raw, err := io.ReadAll(req.Body)
+		if err != nil {
+			log.Println("SetDeleteHandler error: " + err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		body := struct {
+			setID uuid.UUID
+		}{}
+
+		err = json.Unmarshal(raw, &body)
+		if err != nil {
+			log.Println("SetDeleteHandler error: " + err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}*/
+
+	s.Db.DeleteSet(context.Background(), set_id)
+
 }
 
 type ClientFlashcard struct {
@@ -543,4 +596,123 @@ func (s *State) validateSessionToken(req *http.Request) (session, error) {
 
 	userSession.extend()
 	return userSession, nil
+}
+
+func (s *State) FlashcardEditHandler(w http.ResponseWriter, req *http.Request) {
+	userSession, err := s.validateSessionToken(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	set := req.URL.Query().Get("set")
+	set_id, err := uuid.Parse(set)
+	if err != nil {
+		log.Println("SetEditHandler error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	dbEmail, err := s.Db.GetSetOwner(context.Background(), set_id)
+	if err != nil {
+		log.Println("SetEditHandler error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if userSession.email != dbEmail {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	raw, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println("SetEditHandler error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	body := struct {
+		setID uuid.UUID
+		id    int
+		front string
+		back  string
+	}{}
+
+	err = json.Unmarshal(raw, &body)
+	if err != nil {
+		log.Println("SetEdittHandler error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	//is the ID ok?
+	s.Db.EditFlashcards(
+		context.Background(),
+		database.EditFlashcardsParams{
+			SetID: body.setID,
+			ID:    int32(body.id),
+			Front: body.front,
+			Back:  body.back,
+		},
+	)
+
+}
+
+func (s *State) FlashcardDeleteHandler(w http.ResponseWriter, req *http.Request) {
+	userSession, err := s.validateSessionToken(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	set := req.URL.Query().Get("set")
+	set_id, err := uuid.Parse(set)
+	if err != nil {
+		log.Println("DeleteFlashcardHandler error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	dbEmail, err := s.Db.GetSetOwner(context.Background(), set_id)
+	if err != nil {
+		log.Println("DeleteFlashcardHandler error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if userSession.email != dbEmail {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	raw, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println("DeleteFlashcardHandler error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	body := struct {
+		setID uuid.UUID
+		id    int64
+	}{}
+
+	err = json.Unmarshal(raw, &body)
+	if err != nil {
+		log.Println("DeleteFlashcardHandler error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	s.Db.DeleteFlashcards(
+		context.Background(),
+		database.DeleteFlashcardsParams{
+			SetID: body.setID,
+			ID:    int32(body.id),
+		},
+	)
+
 }

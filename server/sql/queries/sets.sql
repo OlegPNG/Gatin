@@ -15,3 +15,6 @@ WHERE (email = $1);
 -- name: GetSetOwner :one
 SELECT email FROM sets
 WHERE (id = $1);
+
+-- name: DeleteSet :exec
+DELETE FROM sets WHERE (id = $1);

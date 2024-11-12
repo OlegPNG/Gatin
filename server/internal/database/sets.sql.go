@@ -46,6 +46,15 @@ func (q *Queries) CreateSet(ctx context.Context, arg CreateSetParams) (Set, erro
 	return i, err
 }
 
+const deleteSet = `-- name: DeleteSet :exec
+DELETE FROM sets WHERE (id = $1)
+`
+
+func (q *Queries) DeleteSet(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteSet, id)
+	return err
+}
+
 const getSetOwner = `-- name: GetSetOwner :one
 SELECT email FROM sets
 WHERE (id = $1)
