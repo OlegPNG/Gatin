@@ -89,9 +89,10 @@ func main() {
 	r.Use(middleware.Logger)
 
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"*"},
+		AllowedOrigins: []string{"https://www.gatin.dev", "https://localhost:3000", "http://localhost:3000", "http://127.0.0.1:3000"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowCredentials: true,
 		MaxAge: 300,
 	}))
 
@@ -99,7 +100,7 @@ func main() {
 
 	state.setupHandlers()
 
-	log.Print("Server listening on http:/localhost:" + port)
+	log.Print("Server listening on http://localhost:" + port)
 	if err := http.ListenAndServe("0.0.0.0:"+port, r); err != nil {
 		log.Fatalf("There was an error with the http server: %v", err)
 	}
