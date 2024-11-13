@@ -1,46 +1,68 @@
+/* Frappe Catppuccin Theme for CreateSet Page */
 .create-set-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
   padding: 20px;
-  font-family: Arial, sans-serif;
+  background-color: #303446;
+  color: #c6d0f5;
 }
 
-.flashcard-toggle {
-  margin: 20px 0;
-}
-
-.toggle-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  color: #fff;
-  transition: background-color 0.3s ease;
-}
-
-.toggle-button.regular {
-  background-color: #00bcd4; /* Blue for regular mode */
-}
-
-.toggle-button.qa {
-  background-color: #ff4081; /* Pink for Q&A mode */
-}
-
-textarea {
-  width: 100%;
-  height: 100px;
-  margin-top: 10px;
+input[type='text'],
+textarea,
+button {
+  width: 80%;
+  margin: 10px 0;
   padding: 10px;
-  border-radius: 5px;
+  font-size: 16px;
+  color: #303446;
+  border: 2px solid #94e2d5;
+  border-radius: 8px;
+  background-color: #e6e9ef;
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #6200ea;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  background-color: #94e2d5;
+  color: #303446;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #3700b3;
+  background-color: #81c8be;
+}
+
+.toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.toggle-container button {
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  background-color: #94e2d5;
+  color: #303446;
+}
+
+.toggle-container button:hover {
+  background-color: #81c8be;
+}
+
+/* Navigation Container */
+.navigation-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.navigation-container a {
+  color: #c6d0f5;
+  text-decoration: none;
+  font-size: 18px;
+  margin-right: 10px;
 }
