@@ -15,7 +15,7 @@ function Quizzes() {
   // Fetch quiz data from the backend
 
   const { state } = useLocation();
-  useEffect(() => {
+  /*useEffect(() => {
     const fetchQuiz = async () => {
       try {
         const setId = state.id;
@@ -34,8 +34,15 @@ function Quizzes() {
       }
     };
     fetchQuiz();
+  });*/
+
+  useEffect(() => {
+    console.log(state.data);
+    setQuizData(state.data);
+    setLoading(false)
   });
 
+  
   // Handle answer selection
   const handleAnswerClick = (answer) => {
     const currentQuestion = quizData[currentQuestionIndex];
@@ -59,8 +66,9 @@ function Quizzes() {
   if (quizData.length === 0) return <p>No quiz data available.</p>;
 
   const currentQuestion = quizData[currentQuestionIndex];
-  const answerOptions = [ currentQuestion.correct, currentQuestion.option2,
-    currentQuestion.option3, currentQuestion.option4 ].sort(() => Math.random() - 0.5); // Shuffle the answer options
+  const answerOptions = [ currentQuestion.correct, currentQuestion.option2, currentQuestion.option3, currentQuestion.option4 ]
+  /*const answerOptions = [ currentQuestion.correct, currentQuestion.option2,
+    currentQuestion.option3, currentQuestion.option4 ].sort(() => Math.random() - 0.5); // Shuffle the answer options*/
 
   return (
     <div className="quiz-container">
@@ -79,7 +87,7 @@ function Quizzes() {
                     : 'incorrect'
                   : ''
               }`}
-              onClick={() => handleAnswerClick(answer)}
+              //onClick={() => handleAnswerClick(answer)}
               disabled={selectedAnswer !== null}
             >
               {answer}
@@ -96,6 +104,7 @@ function Quizzes() {
       </div>
     </div>
   );
+
 }
 
 export default Quizzes;
