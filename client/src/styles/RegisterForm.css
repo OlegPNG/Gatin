@@ -1,36 +1,63 @@
+/* Import the Catppuccin theme if not globally imported */
+@import './catppuccin-theme.css';
+
 .register-form {
-    background-color: #303446; /* Base background */
-    color: #c6d0f5; /* Text color */
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 400px;
-    margin: 0 auto;
-  }
+  background-color: var(--color-background);
+  color: var(--color-text);
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
 
-  .register-form h2 {
-    color: #f2d5cf; /* Highlight color */
-  }
+.register-form h2 {
+  color: var(--color-primary);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
 
-  .register-form input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 4px;
-    background-color: #414559;
-    color: #c6d0f5;
-  }
+.register-form form {
+  display: flex;
+  flex-direction: column;
+}
 
-  .register-form button {
-    width: 100%;
-    padding: 10px;
-    background-color: #7287fd; /* Button color */
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.register-form input[type="email"],
+.register-form input[type="password"] {
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 5px;
+  background-color: var(--color-secondary);
+  color: var(--color-background);
+  font-size: 1rem;
+}
 
-  .register-form button:hover {
-    background-color: #babbf1; /* Hover color */
-  }
+.register-form input::placeholder {
+  color: var(--color-background);
+}
+
+.register-form input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px var(--color-primary);
+}
+
+/* Register Button Styling for the Register Page */
+.register-form .register-submit-button {
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background-color: #FF6F61; /* Soft red color for distinction */
+  color: #FFFFFF;
+  border: 2px solid #FF5733; /* Darker red border */
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.register-form .register-submit-button:hover {
+  background-color: #FF5733; /* Darker red on hover */
+}
