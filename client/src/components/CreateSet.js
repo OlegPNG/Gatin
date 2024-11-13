@@ -7,31 +7,43 @@ export default function CreateSet() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
-  const [flashcardType, setFlashcardType] = useState('regular'); // Define flashcardType state
+  const [course, setCourse] = useState('');
+  const [unit, setUnit] = useState('');
+  const [terms, setTerms] = useState(true); // Default is Regular Flashcards
   const navigate = useNavigate();
 
+  // Handle file upload
   const handleFileUpload = (e) => {
-    const file = e.target.files[0];
+    const uploadedFile = e.target.files[0];
     const reader = new FileReader();
-    reader.onload = (foo) => {
-      setFile(foo.target.result);
+    reader.onload = (event) => {
+      setFile(event.target.result);
     };
-    reader.readAsText(file);
-    console.log('File Content: ' + file);
+    reader.readAsText(uploadedFile);
   };
 
+  // Toggle between Regular Flashcards and Q&A
+  const handleToggleFlashcardType = () => {
+    setTerms(!terms);
+  };
+
+  // Handle creating the set with the required structure
   const handleCreateSet = async () => {
     if (!file) {
       alert('Please upload a file.');
       return;
     }
 
-    // Create a simple JavaScript object with the required data
+    // Create JSON object based on the required structure
     const requestData = {
-      title,
-      description,
       notes: file,
-      flashcardType,
+      preferences: {
+        terms: terms, // true for Regular Flashcards, false for Q&A
+        course: course,
+        unit: unit,
+      },
+      title: title,
+      description: description,
     };
 
     try {
@@ -43,13 +55,8 @@ export default function CreateSet() {
         navigate('/');
       }
     } catch (error) {
-      alert('Failed to generate flashcards. ' + error);
+      alert('Failed to generate flashcards. ' + error.message);
     }
-  };
-
-  const handleToggle = () => {
-    // Toggle between 'regular' and 'qa' types
-    setFlashcardType((prevType) => (prevType === 'regular' ? 'qa' : 'regular'));
   };
 
   return (
@@ -66,10 +73,28 @@ export default function CreateSet() {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
+      <input
+        type="text"
+        placeholder="Course"
+        value={course}
+        onChange={(e) => setCourse(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Unit"
+        value={unit}
+        onChange={(e) => setUnit(e.target.value)}
+      />
+
+      {/* Toggle Button for Flashcard Type */}
+      <div className="toggle-container">
+        <label>Flashcard Type:</label>
+        <button onClick={handleToggleFlashcardType}>
+          {terms ? 'Regular Flashcards' : 'Q&A Flashcards'}
+        </button>
+      </div>
+
       <input type="file" accept=".md,.txt" onChange={handleFileUpload} />
-      <button onClick={handleToggle}>
-        Toggle Flashcard Type: {flashcardType === 'regular' ? 'Regular' : 'Question & Answer'}
-      </button>
       <button onClick={handleCreateSet}>Create Set</button>
     </div>
   );
