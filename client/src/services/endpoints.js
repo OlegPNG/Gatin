@@ -42,10 +42,7 @@ const endpoints = {
   },
 
   generateFlashcards: async (data) => {
-    var object = {};
-    data.forEach((value, key) => object[key] = value);
-    object["preferences"] = {}
-    var json = JSON.stringify(object);
+    var json = JSON.stringify(data);
     console.log(json)
     const response = await fetch(`${BASE_URL}/generate`, {
       method: 'POST',
@@ -63,8 +60,8 @@ const endpoints = {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    return response.json();
+    if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response;
   },
 
   getFlashcardsBySetId: async (setId) => {

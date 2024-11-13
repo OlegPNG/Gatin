@@ -15,6 +15,7 @@ function Flashcards() {
   const { state } = useLocation();
   useEffect(() => {
     const fetchFlashcards = async () => {
+      console.log("Fetching flashcards")
       try {
         const setId = state.id; // Replace with actual set ID
         const response = await endpoints.getFlashcardsBySetId(setId); // Use default import
@@ -37,7 +38,6 @@ function Flashcards() {
   const handleBack = () => setCurrentIndex((currentIndex - 1 + flashcards.length) % flashcards.length);
 
   //console.log("# Of Flashcards: " + flashcards.length)
-  console.log(flashcards)
   if (flashcards !== null) {
     if (flashcards.length === 0) return <div>Loading flashcards...</div>;
     return (

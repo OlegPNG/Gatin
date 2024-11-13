@@ -1,37 +1,68 @@
+/* Frappe Catppuccin Theme for CreateSet Page */
 .create-set-page {
-    background-color: #303446;
-    color: #c6d0f5;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+  background-color: #303446;
+  color: #c6d0f5;
+}
 
-  .create-set-page h2 {
-    color: #f2d5cf;
-  }
+input[type='text'],
+textarea,
+button {
+  width: 80%;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 16px;
+  color: #303446;
+  border: 2px solid #94e2d5;
+  border-radius: 8px;
+  background-color: #e6e9ef;
+}
 
-  .create-set-page input,
-  .create-set-page textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 4px;
-    background-color: #414559;
-    color: #c6d0f5;
-  }
+button {
+  background-color: #94e2d5;
+  color: #303446;
+  cursor: pointer;
+}
 
-  .create-set-page button {
-    width: 100%;
-    padding: 10px;
-    background-color: #7287fd;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+button:hover {
+  background-color: #81c8be;
+}
 
-  .create-set-page button:hover {
-    background-color: #babbf1;
-  }
+.toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.toggle-container button {
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  background-color: #94e2d5;
+  color: #303446;
+}
+
+.toggle-container button:hover {
+  background-color: #81c8be;
+}
+
+/* Navigation Container */
+.navigation-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.navigation-container a {
+  color: #c6d0f5;
+  text-decoration: none;
+  font-size: 18px;
+  margin-right: 10px;
+}

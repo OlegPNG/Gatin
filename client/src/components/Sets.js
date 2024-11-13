@@ -24,11 +24,26 @@ export default function Sets() {
     fetchSets();
   }, []);
 
-  const handleGenerate = (type, setId) => {
+  async function fetchQuiz(setId) {
+    try {
+      const response = await endpoints.generateQuiz(setId);
+      if (response.status !== 401) {
+        const data = await response.json();
+        navigate('/quizzes', { state: { data: data } })
+      } else {
+        navigate('/')
+      }
+    } catch (err) {
+      alert(err)
+    } 
+  };
+
+  const handleGenerate = async (type, setId) => {
     if (type === 'flashcards') {
       navigate(`/flashcards`,{ state: { id: setId } });
     } else if (type === 'quizzes') {
-      navigate(`/quizzes/${setId}`);
+      //navigate(`/quizzes`, { state: { id: setId  } });
+      await fetchQuiz(setId)
     } else if (type === 'matching') {
       navigate(`/matching`, { state: { id: setId } });
     }
@@ -48,9 +63,9 @@ export default function Sets() {
             <div key={set.id} className="set-item">
               <h3>{set.title}</h3>
               <p>{set.description}</p>
-              <button onClick={() => handleGenerate('flashcards', set.id)}>View Flashcards</button>
-              <button onClick={() => handleGenerate('quizzes', set.id)}>Generate Quiz</button>
-              <button onClick={() => handleGenerate('matching', set.id)}>Generate Matching</button>
+              <button onClick={async () => await handleGenerate('flashcards', set.id)}>View Flashcards</button>
+              <button onClick={async () => await handleGenerate('quizzes', set.id)}>Generate Quiz</button>
+              <button onClick={async () => await handleGenerate('matching', set.id)}>Generate Matching</button>
             </div>
           ))}
         </div>
