@@ -1,41 +1,97 @@
+/* Frappe Catppuccin Theme for Matching Game */
 .matching-container {
-    text-align: center;
+  background-color: #303446;
+  color: #c6d0f5;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 1000px;
+  margin: 50px auto;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.matching-container h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.matching-grid {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.questions, .answers {
+  width: 45%;
+}
+
+.questions h2, .answers h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.question-item, .answer-item {
+  padding: 12px;
+  background-color: #94e2d5;
+  color: #303446;
+  border: 2px solid #94e2d5;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.question-item:hover, .answer-item:hover {
+  background-color: #81c8be;
+  border-color: #81c8be;
+}
+
+.question-item.selected {
+  background-color: #f38ba8;
+  border-color: #f38ba8;
+}
+
+.matched-pairs {
+  margin-top: 40px;
+}
+
+.matched-pairs h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.matched-pair {
+  background-color: #a6e3a1;
+  color: #303446;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.matched-pair strong {
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .matching-container {
+    padding: 15px;
   }
 
   .matching-grid {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
   }
 
   .questions, .answers {
-    width: 45%;
+    width: 90%;
+    margin-bottom: 20px;
   }
 
   .question-item, .answer-item {
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid #007bff;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #f0f8ff;
-    transition: background-color 0.3s;
-  }
-
-  .question-item.selected {
-    background-color: #cce5ff;
-  }
-
-  .question-item:hover, .answer-item:hover {
-    background-color: #e6f7ff;
+    font-size: 1rem;
   }
 
   .matched-pairs {
-    margin-top: 30px;
-    border-top: 1px solid #ddd;
-    padding-top: 10px;
+    width: 90%;
   }
-
-  .matched-pair {
-    margin: 5px 0;
-  }
+}

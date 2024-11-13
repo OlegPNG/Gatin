@@ -42,10 +42,7 @@ const endpoints = {
   },
 
   generateFlashcards: async (data) => {
-    var object = {};
-    data.forEach((value, key) => object[key] = value);
-    object["preferences"] = {}
-    var json = JSON.stringify(object);
+    var json = JSON.stringify(data);
     console.log(json)
     const response = await fetch(`${BASE_URL}/generate`, {
       method: 'POST',
