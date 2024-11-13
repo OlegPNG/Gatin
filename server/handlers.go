@@ -452,7 +452,7 @@ func (s *State) SigninHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sessionToken := uuid.NewString()
-	expiresAt := time.Now().Add(120 * time.Second)
+	expiresAt := time.Now().Add(600 * time.Second)
 
 	s.sessions[sessionToken] = session{
 		email:  creds.Email,
@@ -488,7 +488,7 @@ func (s *State) RefreshHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newToken := uuid.NewString()
-	expiresAt := time.Now().Add(120 * time.Second)
+	expiresAt := time.Now().Add(600 * time.Second)
 
 	s.sessions[newToken] = session{
 		email:  userSession.email,
