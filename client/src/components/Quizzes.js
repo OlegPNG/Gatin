@@ -46,10 +46,10 @@ function Quizzes() {
   // Handle answer selection
   const handleAnswerClick = (answer) => {
     const currentQuestion = quizData[currentQuestionIndex];
-    if (answer === currentQuestion.correctAnswer) {
+    if (answer === currentQuestion.correct) {
       setFeedback('Correct!');
     } else {
-      setFeedback(`Incorrect. The correct answer was: ${currentQuestion.correctAnswer}`);
+      setFeedback(`Incorrect. The correct answer was: ${currentQuestion.correct}`);
     }
     setSelectedAnswer(answer);
   };
@@ -66,9 +66,9 @@ function Quizzes() {
   if (quizData.length === 0) return <p>No quiz data available.</p>;
 
   const currentQuestion = quizData[currentQuestionIndex];
-  const answerOptions = [ currentQuestion.correct, currentQuestion.option2, currentQuestion.option3, currentQuestion.option4 ]
-  /*const answerOptions = [ currentQuestion.correct, currentQuestion.option2,
-    currentQuestion.option3, currentQuestion.option4 ].sort(() => Math.random() - 0.5); // Shuffle the answer options*/
+  //const answerOptions = [ currentQuestion.correct, currentQuestion.option2, currentQuestion.option3, currentQuestion.option4 ]
+  const answerOptions = [ currentQuestion.correct, currentQuestion.option2,
+    currentQuestion.option3, currentQuestion.option4 ].sort(() => Math.random() - 0.5); // Shuffle the answer options
 
   return (
     <div className="quiz-container">
@@ -87,7 +87,7 @@ function Quizzes() {
                     : 'incorrect'
                   : ''
               }`}
-              //onClick={() => handleAnswerClick(answer)}
+              onClick={() => handleAnswerClick(answer)}
               disabled={selectedAnswer !== null}
             >
               {answer}
