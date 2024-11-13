@@ -28,7 +28,7 @@ export default function Sets() {
     if (type === 'flashcards') {
       navigate(`/flashcards`,{ state: { id: setId } });
     } else if (type === 'quizzes') {
-      navigate(`/quizzes/${setId}`);
+      navigate(`/quizzes`, { state: { id: setId  } });
     } else if (type === 'matching') {
       navigate(`/matching`, { state: { id: setId } });
     }

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Navigation from './Navigation';
 import endpoints from '../services/endpoints.js';
 import '../styles/Quizzes.css';
+import { useLocation } from 'react-router-dom';
 
-function Quizzes({ setId }) {
+function Quizzes() {
   const [quizData, setQuizData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -12,13 +13,17 @@ function Quizzes({ setId }) {
   const [feedback, setFeedback] = useState('');
 
   // Fetch quiz data from the backend
+
+  const { state } = useLocation();
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
+        const setId = state.id;
         setLoading(true);
         const response = await endpoints.generateQuiz(setId);
         if (response.status !== 401) {
-          setQuizData(response.data.questions); // Assuming the response has a 'questions' field
+          const data = await response.json();
+          setQuizData(data); // Assuming the response has a 'questions' field
         } else {
           setError('Unauthorized. Please log in again.');
         }
@@ -29,7 +34,7 @@ function Quizzes({ setId }) {
       }
     };
     fetchQuiz();
-  }, [setId]);
+  });
 
   // Handle answer selection
   const handleAnswerClick = (answer) => {
@@ -54,10 +59,8 @@ function Quizzes({ setId }) {
   if (quizData.length === 0) return <p>No quiz data available.</p>;
 
   const currentQuestion = quizData[currentQuestionIndex];
-  const answerOptions = [
-    currentQuestion.correctAnswer,
-    ...currentQuestion.incorrectAnswers,
-  ].sort(() => Math.random() - 0.5); // Shuffle the answer options
+  const answerOptions = [ currentQuestion.correct, currentQuestion.option2,
+    currentQuestion.option3, currentQuestion.option4 ].sort(() => Math.random() - 0.5); // Shuffle the answer options
 
   return (
     <div className="quiz-container">
@@ -71,7 +74,7 @@ function Quizzes({ setId }) {
               key={index}
               className={`answer-button ${
                 selectedAnswer === answer
-                  ? answer === currentQuestion.correctAnswer
+                  ? answer === currentQuestion.correct
                     ? 'correct'
                     : 'incorrect'
                   : ''
