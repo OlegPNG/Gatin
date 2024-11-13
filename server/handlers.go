@@ -465,6 +465,8 @@ func (s *State) SigninHandler(w http.ResponseWriter, r *http.Request) {
 		Name:    "session_token",
 		Value:   sessionToken,
 		Expires: expiresAt,
+		//SameSite: http.SameSiteNoneMode,
+		//Secure: true,
 	})
 }
 
