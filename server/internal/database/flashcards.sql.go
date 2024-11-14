@@ -45,6 +45,41 @@ type CreateFlashcardsParams struct {
 	Back  string    `json:"back"`
 }
 
+const deleteFlashcards = `-- name: DeleteFlashcards :exec
+DELETE FROM flashcards WHERE (set_id = $1 AND id =$2)
+`
+
+type DeleteFlashcardsParams struct {
+	SetID uuid.UUID `json:"set_id"`
+	ID    int32     `json:"id"`
+}
+
+func (q *Queries) DeleteFlashcards(ctx context.Context, arg DeleteFlashcardsParams) error {
+	_, err := q.db.Exec(ctx, deleteFlashcards, arg.SetID, arg.ID)
+	return err
+}
+
+const editFlashcards = `-- name: EditFlashcards :exec
+UPDATE flashcards SET front = $3, back = $4 WHERE (set_id = $1 AND id =$2)
+`
+
+type EditFlashcardsParams struct {
+	SetID uuid.UUID `json:"set_id"`
+	ID    int32     `json:"id"`
+	Front string    `json:"front"`
+	Back  string    `json:"back"`
+}
+
+func (q *Queries) EditFlashcards(ctx context.Context, arg EditFlashcardsParams) error {
+	_, err := q.db.Exec(ctx, editFlashcards,
+		arg.SetID,
+		arg.ID,
+		arg.Front,
+		arg.Back,
+	)
+	return err
+}
+
 const getAllFlashcards = `-- name: GetAllFlashcards :many
 SELECT set_id, id, front, back FROM flashcards
 `

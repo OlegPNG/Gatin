@@ -46,6 +46,30 @@ func (q *Queries) CreateSet(ctx context.Context, arg CreateSetParams) (Set, erro
 	return i, err
 }
 
+const deleteSet = `-- name: DeleteSet :exec
+DELETE FROM sets WHERE (id = $1)
+`
+
+func (q *Queries) DeleteSet(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteSet, id)
+	return err
+}
+
+const editSet = `-- name: EditSet :exec
+UPDATE sets SET title = $2, description = $3 WHERE (id = $1)
+`
+
+type EditSetParams struct {
+	ID          uuid.UUID `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+}
+
+func (q *Queries) EditSet(ctx context.Context, arg EditSetParams) error {
+	_, err := q.db.Exec(ctx, editSet, arg.ID, arg.Title, arg.Description)
+	return err
+}
+
 const getSetOwner = `-- name: GetSetOwner :one
 SELECT email FROM sets
 WHERE (id = $1)
