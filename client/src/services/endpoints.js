@@ -6,7 +6,7 @@ const endpoints = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response;
@@ -25,7 +25,6 @@ const endpoints = {
 
   getUserSets: async () => {
     const response = await fetch(`${BASE_URL}/sets`, { credentials: 'include' });
-    console.log(response)
     if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
     return response;
   },
@@ -42,20 +41,18 @@ const endpoints = {
   },
 
   generateFlashcards: async (data) => {
-    var json = JSON.stringify(data);
-    console.log(json)
     const response = await fetch(`${BASE_URL}/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: json,
+      body: JSON.stringify(data),
     });
     if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
     return response;
   },
 
   generateQuiz: async (setId) => {
-    const response = await fetch(`${BASE_URL}/quiz?set=${setId}`, { // changed to GET with query parameter
+    const response = await fetch(`${BASE_URL}/quiz?set=${setId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -65,7 +62,7 @@ const endpoints = {
   },
 
   getFlashcardsBySetId: async (setId) => {
-    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`); // Ensure this matches backend query param handling
+    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`);
     if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
     return response;
   },
@@ -83,6 +80,29 @@ const endpoints = {
 
   getQuizzes: async () => {
     const response = await fetch(`${BASE_URL}/quizzes`, { credentials: 'include' });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
+  },
+
+  // New Edit Flashcard API Call (POST request)
+  editFlashcard: async (setId, data) => {
+    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response.json();
+  },
+
+  // New Delete Flashcard API Call (DELETE request)
+  deleteFlashcard: async (setId, flashcardId) => {
+    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}&id=${flashcardId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response.json();
   },
