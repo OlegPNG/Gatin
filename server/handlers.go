@@ -481,6 +481,17 @@ func (s *State) GeneratePostHandler(w http.ResponseWriter, req *http.Request) {
 
 	//create the set after generating flashcards.
 
+	s.Db.CreateSet(
+		context.Background(),
+		database.CreateSetParams{
+			ID:          setID,
+			Title:       title,
+			Description: description,
+			Email:       userSession.email,
+		},
+	)
+
+
 	for _, card := range flashcards {
 		_, err := s.Db.CreateFlashcard(
 			context.Background(),
@@ -496,16 +507,6 @@ func (s *State) GeneratePostHandler(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 	}
-
-	s.Db.CreateSet(
-		context.Background(),
-		database.CreateSetParams{
-			ID:          setID,
-			Title:       title,
-			Description: description,
-			Email:       userSession.email,
-		},
-	)
 
 	response := struct {
 		SetID uuid.UUID `json:"setID"`
