@@ -11,12 +11,14 @@
   background-color: var(--color-background);
 }
 
+/* Header Styling */
 .flashcard-container h1 {
   font-size: 2rem;
   color: var(--color-primary);
   margin-bottom: 1.5rem;
 }
 
+/* Main Flashcard Styling */
 .flashcard {
   width: 300px;
   height: 200px;
@@ -65,6 +67,7 @@
   transform: rotateY(0);
 }
 
+/* Flashcard Navigation */
 .flashcard-nav {
   display: flex;
   gap: 10px;
@@ -86,14 +89,144 @@
   background-color: var(--color-accent);
 }
 
+/* Expand Options Button */
+.expand-arrow {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Study Options Buttons */
+.study-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.home-button {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  padding: 10px 20px;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Scrollable Flashcard List */
+.flashcard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 90%;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: var(--color-background-alt);
+  border: 2px solid var(--color-accent);
+  border-radius: 10px;
+}
+
+.flashcard-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--color-secondary);
+  color: var(--color-background);
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-half {
+  width: 45%;
+}
+
+/* Delete Button Styling */
+.delete-button {
+  background-color: var(--color-red);
+  color: var(--color-background);
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: var(--color-red-hover);
+}
+
+/* Edit Controls */
+.edit-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.edit-controls button {
+  padding: 10px 20px;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-controls button:hover {
+  background-color: var(--color-accent);
+}
+
+/* Edit Mode Section */
+.edit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  width: 90%;
+}
+
+.edit-section input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid var(--color-accent);
+  border-radius: 5px;
+  background-color: var(--color-background-alt);
+  color: var(--color-text);
+}
+
+.edit-section button {
+  padding: 10px;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-section button:hover {
+  background-color: var(--color-accent);
+}
+
+/* Responsive Styling */
 @media (max-width: 500px) {
   .flashcard {
     width: 250px;
     height: 180px;
   }
 
-  .flashcard-nav button {
+  .flashcard-nav button,
+  .edit-controls button {
     padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  .edit-section input {
     font-size: 0.9rem;
   }
 }

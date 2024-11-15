@@ -1,28 +1,13 @@
-/* Frappe Catppuccin Theme for Sets Page */
+/* Catppuccin Frappe Theme for Sets Page */
 .sets-page {
   padding: 20px;
   background-color: #303446;
   color: #c6d0f5;
 }
 
-button {
-  background-color: #94e2d5;
-  color: #303446;
-  cursor: pointer;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  margin: 10px;
-}
-
-button:hover {
-  background-color: #81c8be;
-}
-
-/* 2-Column Layout for Sets */
 .sets-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   margin-top: 20px;
 }
@@ -33,6 +18,7 @@ button:hover {
   color: #303446;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, opacity 0.3s;
 }
 
 .set-item h3 {
@@ -45,18 +31,47 @@ button:hover {
   margin-bottom: 10px;
 }
 
-/* Navigation Container */
-.navigation-container {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+.create-set {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #94e2d5;
+  color: #303446;
+  cursor: pointer;
 }
 
-.navigation-container a {
-  color: #c6d0f5;
-  text-decoration: none;
-  font-size: 18px;
-  margin-right: 10px;
+.create-set .plus-icon {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.set-item.hovered {
+  transform: scale(1.05);
+  z-index: 1;
+}
+
+.set-item:not(.hovered) {
+  opacity: 0.8;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+button {
+  background-color: #94e2d5;
+  color: #303446;
+  cursor: pointer;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #81c8be;
 }
 
 /* Pagination Styling */
