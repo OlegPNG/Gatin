@@ -1,10 +1,10 @@
-/* catppuccin-theme.css */
 :root {
-    --color-text: #D9E0EE;
-    --color-background: #1E1E28;
-    --color-accent: #96CDFB;
-    --color-primary: #96CDFB;
-    --color-secondary: #F28FAD;
-    /* Add additional colors as needed */
-  }
-  
+  --color-text: #d9e0ee; /* Main text color */
+  --color-background: #1e1e28; /* Background color for main content */
+  --color-background-alt: #282a36; /* Alternate background color for containers */
+  --color-primary: #96cdfb; /* Primary accent color (buttons, highlights, etc.) */
+  --color-secondary: #44475a; /* Secondary background for inputs */
+  --color-accent: #76b4e5; /* Accent color for hover effects */
+  --color-error: #ff6f61; /* Error state background color */
+  --color-error-border: #ff5733; /* Error state border for buttons */
+}

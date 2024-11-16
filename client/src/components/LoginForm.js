@@ -9,38 +9,43 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     try {
       const response = await endpoints.signInUser({ email, password });
       if (response.ok) {
-        navigate('/sets');
+        navigate('/sets'); 
       } else {
         alert('Login failed. Please check your credentials.');
       }
-    } catch(error) {
-      alert('Login failed. ' + error)
+    } catch (error) {
+      alert('Login failed. ' + error);
     }
   };
 
   return (
-    <div className="login-form">
-      <h2>Sign In</h2>
-      <form onSubmit={handleSignIn}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-      </form>
-      <button onClick={() => navigate('/register')}>Register</button>
+    <div className="login-page">
+      <h1>Gatin</h1>
+      <div className="login-form">
+        <h2>Sign In</h2>
+        <form onSubmit={handleSignIn}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} 
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} 
+          />
+          <button type="submit">Login</button>
+        </form>
+        <p className="register-link">
+          or <a href="/register">register</a>
+        </p>
+      </div>
     </div>
   );
 }
