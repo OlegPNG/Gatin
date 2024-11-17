@@ -19,6 +19,7 @@ function Flashcards() {
     const fetchFlashcards = async () => {
       try {
         const setId = state.id;
+        console.log('Set ID: ' + setId);
         const response = await endpoints.getFlashcardsBySetId(setId);
         const data = await response.json();
         setFlashcards(data.flashcards);

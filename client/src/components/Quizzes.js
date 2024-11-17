@@ -18,8 +18,8 @@ function Quizzes() {
   }, [state.data]);
 
   const toggleOptions = () => setShowOptions(!showOptions);
-  const navigateToFlashcards = () => navigate('/flashcards', { state });
-  const navigateToMatching = () => navigate('/matching', { state });
+  const navigateToFlashcards = () => navigate('/flashcards', { state: { id: state.id } });
+  const navigateToMatching = () => navigate('/matching', { state: { id: state.id  } });
   const navigateHome = () => navigate('/sets');
 
   if (error) return <div>Error: {error}</div>;

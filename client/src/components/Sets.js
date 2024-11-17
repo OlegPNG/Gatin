@@ -37,7 +37,7 @@ export default function Sets() {
         setLoading(false);
         if (response.status !== 401) {
           const data = await response.json();
-          navigate('/quizzes', { state: { data } });
+          navigate('/quizzes', { state: { data, id: setId } });
         } else {
           navigate('/');
         }

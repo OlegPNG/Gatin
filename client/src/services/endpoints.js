@@ -63,6 +63,7 @@ const endpoints = {
 
   getFlashcardsBySetId: async (setId) => {
     const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`);
+    console.log(response);
     if (!response.ok && response.status !== 401) throw new Error(`HTTP error! Status: ${response.status}`);
     return response;
   },
