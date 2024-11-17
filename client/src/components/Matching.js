@@ -18,7 +18,8 @@ function Matching() {
       try {
         const setId = state.id;
         const data = await endpoints.getFlashcardsBySetId(setId);
-        const fc = await data.json().flashcards;
+        const object = await data.json();
+        const fc = object.flashcards;
         setFlashcards(fc);
         setQuestions(fc.map(card => card.front));
         setAnswers(fc.map(card => card.back));
