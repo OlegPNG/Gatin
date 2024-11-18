@@ -1,45 +1,71 @@
+/* Main Flashcard Container */
 .flashcard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
   padding: 20px;
-  background-color: var(--color-background);
   color: var(--color-text);
+  background-color: var(--color-background);
 }
 
-h1 {
-  cursor: pointer;
+.flashcard-container h1 {
   font-size: 2rem;
   color: var(--color-primary);
+  margin-bottom: 1.5rem;
 }
 
-/* Base View Styling */
-.base-view .flashcard-list {
+/* Main Flashcard Styling */
+.flashcard {
+  width: 300px;
+  height: 200px;
+  perspective: 1000px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.flashcard .front,
+.flashcard .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  border: 2px solid var(--color-accent);
+  border-radius: 10px;
+  transition: transform 0.6s ease;
+}
+
+.flashcard .front {
+  background-color: var(--color-secondary);
+}
+
+.flashcard .back {
+  background-color: var(--color-primary);
+  transform: rotateY(180deg);
+}
+
+.flipped .front {
+  transform: rotateY(180deg);
+}
+
+.flipped .back {
+  transform: rotateY(0);
+}
+
+/* Flashcard Navigation */
+.flashcard-nav {
+  display: flex;
   gap: 10px;
   margin-top: 20px;
 }
 
-.flashcard-item {
-  padding: 10px;
-  background-color: var(--color-secondary);
-  border-radius: 5px;
-  color: var(--color-background);
-}
-
-/* Add Flashcard Section */
-.add-flashcard input {
-  padding: 8px;
-  margin: 5px 0;
-  border: 1px solid var(--color-primary);
-  border-radius: 5px;
-  width: 100%;
-}
-
-.add-flashcard button {
-  margin-top: 10px;
-  padding: 10px;
+.flashcard-nav button {
+  padding: 10px 20px;
   background-color: var(--color-primary);
   color: var(--color-background);
   border: none;
@@ -47,36 +73,68 @@ h1 {
   cursor: pointer;
 }
 
-/* Detailed View */
-.detailed-view .tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+.flashcard-nav button:hover {
+  background-color: var(--color-accent);
 }
 
-.tabs button {
-  padding: 10px;
-  background-color: var(--color-secondary);
+/* Divider Line */
+.divider-line {
+  width: 90%;
+  height: 2px;
+  background-color: var(--color-accent);
+  margin: 20px 0;
+}
+
+/* Edit Button Styling */
+.edit-button-container {
+  display: flex;
+  justify-content: flex-start;
+  width: 90%;
+}
+
+.edit-button {
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  background-color: var(--color-primary);
   color: var(--color-background);
-  border: none;
+  border: 1px solid var(--color-accent);
   border-radius: 5px;
   cursor: pointer;
 }
 
-/* Single Flashcard */
-.flashcard {
-  width: 300px;
-  height: 200px;
-  border: 1px solid var(--color-primary);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  cursor: pointer;
+.edit-button:hover {
+  background-color: var(--color-accent);
 }
 
-.flashcard .front, .flashcard .back {
+/* Centered Scrollable Flashcards */
+.scrollable-flashcards-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.scrollable-flashcards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 80%;
   padding: 10px;
-  color: var(--color-text);
+  background-color: var(--color-secondary);
+  border-radius: 10px;
+}
+
+.scrollable-flashcard {
+  padding: 10px;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border: 1px solid var(--color-accent);
+  border-radius: 5px;
+}
+
+.scrollable-front,
+.scrollable-back {
+  font-size: 1rem;
 }
