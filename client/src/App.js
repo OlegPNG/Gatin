@@ -7,6 +7,7 @@ import CreateSet from './components/CreateSet';
 import Flashcards from './components/Flashcards';
 import Quizzes from './components/Quizzes';
 import Matching from './components/Matching';
+import './styles/catppuccin-theme.css';
 
 export default function App() {
   return (
