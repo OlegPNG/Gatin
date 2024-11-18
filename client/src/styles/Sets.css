@@ -34,7 +34,10 @@
   text-align: center;
   transition: transform 0.2s;
   position: relative;
-  min-height: 50px;
+  min-height: 150px; /* Ensure consistent height even without description */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
 }
 
 .static-card {
