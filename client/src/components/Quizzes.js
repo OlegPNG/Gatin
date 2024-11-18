@@ -42,7 +42,7 @@ function Quizzes() {
     setLoading(false)
   });
 
-  
+
   // Handle answer selection
   const handleAnswerClick = (answer) => {
     const currentQuestion = quizData[currentQuestionIndex];

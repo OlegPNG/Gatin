@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from './Navigation';
-import endpoints from '../services/endpoints.js'; // Use default import
+import endpoints from '../services/endpoints.js';
 import '../styles/Flashcards.css';
 import { useLocation } from 'react-router-dom';
 
@@ -10,24 +10,22 @@ function Flashcards() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
-  // Fetch flashcards when the component mounts
-
   const { state } = useLocation();
+
+  // Fetch flashcards when the component mounts
   useEffect(() => {
     const fetchFlashcards = async () => {
-      console.log("Fetching flashcards")
       try {
-        const setId = state.id; // Replace with actual set ID
-        const response = await endpoints.getFlashcardsBySetId(setId); // Use default import
+        const setId = state.id;
+        const response = await endpoints.getFlashcardsBySetId(setId);
         if (response.status !== 401) {
-          const data = await response.json()
+          const data = await response.json();
           setFlashcards(data.flashcards);
         }
       } catch (err) {
         setError(err.message);
       }
     };
-
     fetchFlashcards();
   }, []);
 
@@ -37,35 +35,45 @@ function Flashcards() {
   const handleNext = () => setCurrentIndex((currentIndex + 1) % flashcards.length);
   const handleBack = () => setCurrentIndex((currentIndex - 1 + flashcards.length) % flashcards.length);
 
-  //console.log("# Of Flashcards: " + flashcards.length)
-  if (flashcards !== null) {
-    if (flashcards.length === 0) return <div>Loading flashcards...</div>;
-    return (
+  return (
+    <div className="flashcards-page">
+      <Navigation />
+      <h1>Flashcards</h1>
+
+      {/* Main Flashcard Display */}
       <div className="flashcard-container">
-        <Navigation />
-        <h1>Flashcards</h1>
         {flashcards[currentIndex] ? (
           <div className={`flashcard ${flipped ? 'flipped' : ''}`} onClick={handleFlip}>
-            <div className="front"><strong>Q:</strong> {flashcards[currentIndex].front}</div>
-            <div className="back"><strong>A:</strong> {flashcards[currentIndex].back}</div>
+            <div className="flashcard-inner">
+              <div className="flashcard-front">{flashcards[currentIndex].front}</div>
+              <div className="flashcard-back">{flashcards[currentIndex].back}</div>
+            </div>
           </div>
         ) : (
-            <div className="flashcard-placeholder">No flashcard available</div>
-          )}      <div className="flashcard-nav">
+          <div className="flashcard-placeholder">No flashcard available</div>
+        )}
+        <div className="flashcard-nav">
           <button onClick={handleBack}>Back</button>
           <button onClick={handleNext}>Next</button>
         </div>
       </div>
-    );
-  } else {
-    return (
-      <div className="flashcard-container">
-        <Navigation />
-        <h1>Flashcards</h1>
-        <div className="flashcard-placeholder">No flashcard available</div>
+
+      {/* Divider Line */}
+      <hr className="divider-line" />
+
+      {/* Scrollable List of Flashcards */}
+      <div className="scrollable-flashcards-container">
+        <div className="scrollable-flashcards">
+          {flashcards.map((card, index) => (
+            <div key={index} className="scrollable-flashcard">
+              <div className="scrollable-term">{card.front}</div>
+              <div className="scrollable-answer">{card.back}</div>
+            </div>
+          ))}
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default Flashcards;

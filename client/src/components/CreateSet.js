@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import endpoints from '../services/endpoints';
 import '../styles/CreateSet.css';
+import LoadingOverlay from './LoadingOverlay';
+import Navigation from './Navigation'; // Import the Navigation component
 
 export default function CreateSet() {
   const [title, setTitle] = useState('');
@@ -9,10 +11,11 @@ export default function CreateSet() {
   const [file, setFile] = useState(null);
   const [course, setCourse] = useState('');
   const [unit, setUnit] = useState('');
-  const [terms, setTerms] = useState(true); // Default is Regular Flashcards
+  const [terms, setTerms] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  // Handle file upload
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
     const reader = new FileReader();
@@ -22,32 +25,31 @@ export default function CreateSet() {
     reader.readAsText(uploadedFile);
   };
 
-  // Toggle between Regular Flashcards and Q&A
-  const handleToggleFlashcardType = () => {
-    setTerms(!terms);
-  };
-
-  // Handle creating the set with the required structure
   const handleCreateSet = async () => {
+    if (!title) {
+      setErrorMessage('Title is required.');
+      return;
+    }
+
+    setErrorMessage('');
+
     if (!file) {
       alert('Please upload a file.');
       return;
     }
 
-    // Create JSON object based on the required structure
+    setLoading(true);
+
     const requestData = {
       notes: file,
-      preferences: {
-        terms: terms, // true for Regular Flashcards, false for Q&A
-        course: course,
-        unit: unit,
-      },
-      title: title,
-      description: description,
+      preferences: { terms, course, unit },
+      title,
+      description,
     };
 
     try {
       const response = await endpoints.generateFlashcards(requestData);
+      setLoading(false);
       if (response.status !== 401) {
         alert('Flashcards generated successfully!');
         navigate('/sets');
@@ -55,19 +57,27 @@ export default function CreateSet() {
         navigate('/');
       }
     } catch (error) {
+      setLoading(false);
       alert('Failed to generate flashcards. ' + error.message);
     }
   };
 
   return (
     <div className="create-set-page">
-      <h2>Create New Set</h2>
+      {loading && <LoadingOverlay message="Generating Set" />}
+
+      {/* Include the Navigation component */}
+      <Navigation />
+
+      <h1 className="gatin-title">Gatin</h1>
       <input
         type="text"
-        placeholder="Set Title"
+        placeholder="Set Title (Required)"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        required
       />
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <textarea
         placeholder="Set Description"
         value={description}
@@ -85,16 +95,19 @@ export default function CreateSet() {
         value={unit}
         onChange={(e) => setUnit(e.target.value)}
       />
-
-      {/* Toggle Button for Flashcard Type */}
-      <div className="toggle-container">
-        <label>Flashcard Type:</label>
-        <button onClick={handleToggleFlashcardType}>
-          {terms ? 'Regular Flashcards' : 'Q&A Flashcards'}
+      <div className="flashcard-toggle">
+        <button onClick={() => setTerms(true)} className={terms ? 'active' : ''}>
+          Regular Flashcards
+        </button>
+        <button onClick={() => setTerms(false)} className={!terms ? 'active' : ''}>
+          Q&A Flashcards
         </button>
       </div>
-
-      <input type="file" accept=".md,.txt" onChange={handleFileUpload} />
+      <input
+        type="file"
+        accept=".md,.txt"
+        onChange={handleFileUpload}
+      />
       <button onClick={handleCreateSet}>Create Set</button>
     </div>
   );
