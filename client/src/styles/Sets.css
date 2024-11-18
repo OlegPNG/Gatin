@@ -1,15 +1,22 @@
 /* Frappe Catppuccin Theme for Sets Page */
 .sets-page {
-  padding: 20px;
-  max-width: 1200px;
+  padding: 150px;
   margin: 0 auto;
   text-align: center;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+}
+
+.sets-page h2 {
+  color: var(--color-primary);
 }
 
 .gatin-title {
-  font-size: 2rem;
+  font-size: 50rem;
   color: #c6d0f5;
   margin-bottom: 20px;
+  color: var(--color-primary);
 }
 
 .sets-list {
@@ -27,6 +34,7 @@
   text-align: center;
   transition: transform 0.2s;
   position: relative;
+  min-height: 50px;
 }
 
 .static-card {
@@ -57,8 +65,8 @@
 
 button {
   padding: 10px 20px;
-  background-color: #94e2d5;
-  color: #303446;
+  background-color: var(--color-primary);
+  color: var(--color-primary);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -66,7 +74,7 @@ button {
 }
 
 button:hover {
-  background-color: #81c8be;
+  background-color: var(--color-primary);
 }
 
 .pagination-buttons {
@@ -84,7 +92,7 @@ button:disabled {
 .edit-button {
   padding: 10px 20px;
   font-size: 1rem;
-  background-color: #94e2d5;
+  background-color: var(--color-background);
   color: #303446;
   border: none;
   border-radius: 5px;
@@ -97,7 +105,7 @@ button:disabled {
 }
 
 .edit-button:hover {
-  background-color: #81c8be;
+  background-color: var(--color-primary);
 }
 
 button:disabled {
@@ -123,8 +131,8 @@ button:disabled {
 }
 
 .set-item .delete-button:hover {
-  background-color: #94e2d5;
-  border-color: #c6d0f5;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
   border-radius: 4px;
 }
 

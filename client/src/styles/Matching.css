@@ -1,123 +1,223 @@
-/* Frappe Catppuccin Theme for Matching Game */
+/* General Styling */
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* Matching Header Styling (Scoped to Matching Page) */
+.matching-header {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+  text-align: center;
+  padding: 20px;
+  width: 100%; /* Full width */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Space below the header */
+}
+
+.matching-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+/* Matching Container */
 .matching-container {
-  background-color: #303446;
-  color: #c6d0f5;
+  background-color: var(--color-background-alt);
+  color: var(--color-text);
   padding: 20px;
   border-radius: 10px;
   max-width: 1000px;
-  margin: 50px auto;
+  margin: 20px auto; /* Center the container */
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
-.matching-container h1 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-}
-
+/* Matching Grid */
 .matching-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 150px); /* Match tile width */
+  gap: 30px; /* Space between tiles */
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Matching Tile */
+.matching-tile {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
-}
-
-.questions, .answers {
-  width: 45%;
-}
-
-.questions h2, .answers h2 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-}
-
-.question-item, .answer-item {
-  padding: 12px;
-  background-color: #94e2d5;
-  color: #303446;
-  border: 2px solid #94e2d5;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border: 2px solid var(--color-primary);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+
+  /* Consistent dimensions */
+  width: 150px;
+  height: 175px;
+
+  /* Text Handling */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  position: relative; /* Required for tooltips */
 }
 
-.question-item:hover, .answer-item:hover {
-  background-color: #81c8be;
-  border-color: #81c8be;
+/* Tooltip for full text on hover */
+.matching-tile:hover::after {
+  content: attr(data-tooltip); /* Tooltip text from attribute */
+  position: absolute;
+  top: 105%; /* Position tooltip below tile */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-background-alt);
+  color: var(--color-text);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  white-space: normal; /* Allow wrapping in tooltip */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  max-width: 250px; /* Limit tooltip width */
+  word-wrap: break-word; /* Break long words */
+  display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
-.question-item.selected {
-  background-color: #f38ba8;
-  border-color: #f38ba8;
+.matching-tile:hover {
+  background-color: var(--color-accent);
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(118, 180, 229, 0.5);
 }
 
-.matched-pairs {
-  margin-top: 40px;
+.matching-tile.selected {
+  background-color: var(--color-error);
+  border-color: var(--color-error-border);
+  color: var(--color-text);
 }
 
-.matched-pairs h2 {
+.matching-tile.matched {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-text);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Matched Pairs Section */
+.matching-pairs {
+  margin-top: 30px;
+  padding: 15px;
+  border: 2px dashed var(--color-primary);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.matching-pairs h2 {
   font-size: 1.8rem;
   margin-bottom: 15px;
 }
 
-.matched-pair {
-  background-color: #a6e3a1;
-  color: #303446;
-  padding: 15px;
+.matching-pair {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+  padding: 12px;
   border-radius: 8px;
   margin-bottom: 10px;
+  line-height: 1.5;
+  font-size: 0.9rem;
 }
 
-.matched-pair strong {
-  font-weight: bold;
-}
-
-@media (max-width: 768px) {
-  .matching-container {
-    padding: 15px;
-  }
-
-  .matching-grid {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .questions, .answers {
-    width: 90%;
-    margin-bottom: 20px;
-  }
-
-  .question-item, .answer-item {
-    font-size: 1rem;
-  }
-
-  .matched-pairs {
-    width: 90%;
-  }
-}
-
-.expand-arrow {
-  background: none;
-  border: none;
-  color: var(--color-primary);
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.study-options {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.home-button {
+/* Modal Styling */
+.modal {
   position: fixed;
-  top: 10px;
-  left: 10px;
-  padding: 10px 20px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--color-background-alt);
+  color: var(--color-text);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.modal-button {
   background-color: var(--color-primary);
   color: var(--color-background);
   border: none;
+  padding: 10px 20px;
   border-radius: 5px;
+  margin: 10px;
   cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-button:hover {
+  background-color: var(--color-accent);
+  transform: scale(1.05);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .matching-grid {
+    grid-template-columns: repeat(auto-fit, 120px); /* Match smaller tiles */
+    gap: 25px; /* Adjust spacing for smaller screens */
+  }
+
+  .matching-tile {
+    width: 120px; /* Smaller tile width */
+    height: 140px; /* Adjust height */
+    font-size: 0.8rem; /* Reduce font size */
+  }
+
+  .matching-pair {
+    font-size: 0.85rem; /* Slightly smaller font for matched pairs */
+  }
+}
+
+@media (max-width: 480px) {
+  .matching-grid {
+    grid-template-columns: repeat(auto-fit, 100px); /* Adjust for very small screens */
+    gap: 20px; /* Reduce gap for smaller screens */
+  }
+
+  .matching-tile {
+    width: 100px;
+    height: 120px;
+    font-size: 0.7rem;
+  }
+
+  .matching-pair {
+    font-size: 0.8rem; /* Adjust matched pairs font for mobile */
+  }
 }
