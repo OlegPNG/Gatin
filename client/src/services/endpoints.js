@@ -108,11 +108,11 @@ const endpoints = {
   //   return response.json();
   // },
   deleteSet: async (setId) => {
-    const response = await fetch(`${BASE_URL}/sets`, {
+    const response = await fetch(`${BASE_URL}/sets?set=${setId}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ setId }), // Pass the setId in the request body
+      
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response; // Return the response for further handling if needed
