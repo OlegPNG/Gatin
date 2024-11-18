@@ -98,15 +98,35 @@ const endpoints = {
   },
 
   // New Delete Flashcard API Call (DELETE request)
-  deleteFlashcard: async (setId, flashcardId) => {
-    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}&id=${flashcardId}`, {
+  // deleteFlashcard: async (setId, flashcardId) => {
+  //   const response = await fetch(`${BASE_URL}/flashcards?set=${setId}&id=${flashcardId}`, {
+  //     method: 'DELETE',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     credentials: 'include',
+  //   });
+  //   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+  //   return response.json();
+  // },
+  deleteSet: async (setId) => {
+    const response = await fetch(`${BASE_URL}/sets`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ setId }), // Pass the setId in the request body
+    });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return response; // Return the response for further handling if needed
+  },
+
+  deleteFlashcard: async (setId, flashcardId) => {
+    const response = await fetch(`${BASE_URL}/sets/flashcards?set=${setId}&id=${flashcardId}`, {
+      method: 'DELETE',
       credentials: 'include',
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     return response.json();
   },
+
 };
 
 export default endpoints;

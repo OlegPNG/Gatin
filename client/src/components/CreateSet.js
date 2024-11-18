@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import endpoints from '../services/endpoints';
 import '../styles/CreateSet.css';
 import LoadingOverlay from './LoadingOverlay';
+import Navigation from './Navigation'; // Import the Navigation component
 
 export default function CreateSet() {
   const [title, setTitle] = useState('');
@@ -12,6 +13,7 @@ export default function CreateSet() {
   const [unit, setUnit] = useState('');
   const [terms, setTerms] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleFileUpload = (e) => {
@@ -23,11 +25,14 @@ export default function CreateSet() {
     reader.readAsText(uploadedFile);
   };
 
-  const handleToggleFlashcardType = () => {
-    setTerms(!terms);
-  };
-
   const handleCreateSet = async () => {
+    if (!title) {
+      setErrorMessage('Title is required.');
+      return;
+    }
+
+    setErrorMessage('');
+
     if (!file) {
       alert('Please upload a file.');
       return;
@@ -37,13 +42,9 @@ export default function CreateSet() {
 
     const requestData = {
       notes: file,
-      preferences: {
-        terms: terms,
-        course: course,
-        unit: unit,
-      },
-      title: title,
-      description: description,
+      preferences: { terms, course, unit },
+      title,
+      description,
     };
 
     try {
@@ -64,18 +65,49 @@ export default function CreateSet() {
   return (
     <div className="create-set-page">
       {loading && <LoadingOverlay message="Generating Set" />}
-      <h2>Create New Set</h2>
-      <input type="text" placeholder="Set Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-      <textarea placeholder="Set Description" value={description} onChange={(e) => setDescription(e.target.value)} />
-      <input type="text" placeholder="Course" value={course} onChange={(e) => setCourse(e.target.value)} />
-      <input type="text" placeholder="Unit" value={unit} onChange={(e) => setUnit(e.target.value)} />
-      <div className="toggle-container">
-        <label>Flashcard Type:</label>
-        <button onClick={handleToggleFlashcardType}>
-          {terms ? 'Regular Flashcards' : 'Q&A Flashcards'}
+
+      {/* Include the Navigation component */}
+      <Navigation />
+
+      <h1 className="gatin-title">Gatin</h1>
+      <input
+        type="text"
+        placeholder="Set Title (Required)"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        required
+      />
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      <textarea
+        placeholder="Set Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Course"
+        value={course}
+        onChange={(e) => setCourse(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Unit"
+        value={unit}
+        onChange={(e) => setUnit(e.target.value)}
+      />
+      <div className="flashcard-toggle">
+        <button onClick={() => setTerms(true)} className={terms ? 'active' : ''}>
+          Regular Flashcards
+        </button>
+        <button onClick={() => setTerms(false)} className={!terms ? 'active' : ''}>
+          Q&A Flashcards
         </button>
       </div>
-      <input type="file" accept=".md,.txt" onChange={handleFileUpload} />
+      <input
+        type="file"
+        accept=".md,.txt"
+        onChange={handleFileUpload}
+      />
       <button onClick={handleCreateSet}>Create Set</button>
     </div>
   );
