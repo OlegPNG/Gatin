@@ -9,7 +9,6 @@ function Flashcards() {
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
 
   const { state } = useLocation();
 
@@ -35,45 +34,40 @@ function Flashcards() {
   const handleFlip = () => setFlipped(!flipped);
   const handleNext = () => setCurrentIndex((currentIndex + 1) % flashcards.length);
   const handleBack = () => setCurrentIndex((currentIndex - 1 + flashcards.length) % flashcards.length);
-  const toggleEditMode = () => setIsEditing(!isEditing);
 
   return (
-    <div className="flashcard-container">
+    <div className="flashcards-page">
       <Navigation />
       <h1>Flashcards</h1>
 
       {/* Main Flashcard Display */}
-      {flashcards[currentIndex] ? (
-        <div className={`flashcard ${flipped ? 'flipped' : ''}`} onClick={handleFlip}>
-          <div className="front">{flashcards[currentIndex].front}</div>
-          <div className="back">{flashcards[currentIndex].back}</div>
+      <div className="flashcard-container">
+        {flashcards[currentIndex] ? (
+          <div className={`flashcard ${flipped ? 'flipped' : ''}`} onClick={handleFlip}>
+            <div className="flashcard-inner">
+              <div className="flashcard-front">{flashcards[currentIndex].front}</div>
+              <div className="flashcard-back">{flashcards[currentIndex].back}</div>
+            </div>
+          </div>
+        ) : (
+          <div className="flashcard-placeholder">No flashcard available</div>
+        )}
+        <div className="flashcard-nav">
+          <button onClick={handleBack}>Back</button>
+          <button onClick={handleNext}>Next</button>
         </div>
-      ) : (
-        <div className="flashcard-placeholder">No flashcard available</div>
-      )}
-
-      <div className="flashcard-nav">
-        <button onClick={handleBack}>Back</button>
-        <button onClick={handleNext}>Next</button>
       </div>
 
       {/* Divider Line */}
       <hr className="divider-line" />
 
-      {/* Edit Button Aligned with Home Button */}
-      <div className="edit-button-container">
-        <button className="edit-button" onClick={toggleEditMode}>
-          {isEditing ? 'Stop Editing' : 'Edit'}
-        </button>
-      </div>
-
-      {/* Centered Scrollable Flashcard List */}
+      {/* Scrollable List of Flashcards */}
       <div className="scrollable-flashcards-container">
         <div className="scrollable-flashcards">
           {flashcards.map((card, index) => (
             <div key={index} className="scrollable-flashcard">
-              <div className="scrollable-front">{card.front}</div>
-              <div className="scrollable-back">{card.back}</div>
+              <div className="scrollable-term">{card.front}</div>
+              <div className="scrollable-answer">{card.back}</div>
             </div>
           ))}
         </div>

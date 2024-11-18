@@ -1,33 +1,49 @@
+/* Page Styling */
+.flashcards-page {
+  padding: 20px;
+  text-align: center;
+  background-color: #2e3440; /* Frappe background color */
+  color: #d8dee9; /* Light text color */
+}
+
 /* Main Flashcard Container */
 .flashcard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  height: 100vh;
-  padding: 20px;
-  color: var(--color-text);
-  background-color: var(--color-background);
-}
-
-.flashcard-container h1 {
-  font-size: 2rem;
-  color: var(--color-primary);
-  margin-bottom: 1.5rem;
+  justify-content: center;
+  height: 60vh;
 }
 
 /* Main Flashcard Styling */
 .flashcard {
-  width: 300px;
-  height: 200px;
+  width: 700px;
+  height: 500px;
+  position: relative;
   perspective: 1000px;
   cursor: pointer;
   margin-bottom: 20px;
-  position: relative;
+  background-color: #3b4252; /* Frappe background color */
+  border-radius: 10px;
 }
 
-.flashcard .front,
-.flashcard .back {
+/* Flashcard Inner Structure */
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+/* Flip Animation */
+.flashcard.flipped .flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+/* Front and Back of the Flashcard */
+.flashcard-front,
+.flashcard-back {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -35,106 +51,92 @@
   align-items: center;
   justify-content: center;
   backface-visibility: hidden;
-  border: 2px solid var(--color-accent);
+  border: 2px solid #4c566a; /* Frappe border color */
   border-radius: 10px;
-  transition: transform 0.6s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.flashcard .front {
-  background-color: var(--color-secondary);
+/* Flashcard Front Color */
+.flashcard-front {
+  background-color: #d8dee9; /* Frappe surface color */
+  color: #2e3440; /* Frappe base color */
 }
 
-.flashcard .back {
-  background-color: var(--color-primary);
+/* Flashcard Back Color */
+.flashcard-back {
+  background-color: #81a1c1; /* Frappe blue color */
+  color: #eceff4; /* Frappe text light color */
   transform: rotateY(180deg);
 }
 
-.flipped .front {
-  transform: rotateY(180deg);
-}
-
-.flipped .back {
-  transform: rotateY(0);
-}
-
-/* Flashcard Navigation */
+/* Navigation Buttons */
 .flashcard-nav {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
 }
 
 .flashcard-nav button {
   padding: 10px 20px;
-  background-color: var(--color-primary);
-  color: var(--color-background);
+  background-color: #5e81ac; /* Frappe blue color */
+  color: #eceff4; /* Frappe text light color */
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .flashcard-nav button:hover {
-  background-color: var(--color-accent);
+  background-color: #81a1c1; /* Frappe lighter blue */
 }
 
 /* Divider Line */
 .divider-line {
-  width: 90%;
-  height: 2px;
-  background-color: var(--color-accent);
   margin: 20px 0;
+  border: none;
+  border-top: 2px solid #4c566a; /* Frappe border color */
 }
 
-/* Edit Button Styling */
-.edit-button-container {
-  display: flex;
-  justify-content: flex-start;
-  width: 90%;
-}
-
-.edit-button {
-  padding: 5px 10px;
-  font-size: 0.9rem;
-  background-color: var(--color-primary);
-  color: var(--color-background);
-  border: 1px solid var(--color-accent);
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.edit-button:hover {
-  background-color: var(--color-accent);
-}
-
-/* Centered Scrollable Flashcards */
+/* Scrollable Flashcards Container */
 .scrollable-flashcards-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border-top: 2px solid #4c566a; /* Frappe border color */
 }
 
+/* Scrollable Flashcards Layout */
 .scrollable-flashcards {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 10px;
-  max-height: 200px;
-  overflow-y: auto;
-  width: 80%;
-  padding: 10px;
-  background-color: var(--color-secondary);
-  border-radius: 10px;
 }
 
+/* Individual Scrollable Flashcard */
 .scrollable-flashcard {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   padding: 10px;
-  background-color: var(--color-primary);
-  color: var(--color-background);
-  border: 1px solid var(--color-accent);
+  border: 1px solid #4c566a; /* Frappe border color */
   border-radius: 5px;
+  background-color: #3b4252; /* Frappe background color */
 }
 
-.scrollable-front,
-.scrollable-back {
-  font-size: 1rem;
+/* Term (Front) Box Styling */
+.scrollable-term {
+  padding: 10px;
+  background-color: #434c5e; /* Frappe grayish color for term */
+  color: #eceff4; /* Light text color */
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Answer (Back) Box Styling */
+.scrollable-answer {
+  padding: 10px;
+  background-color: #5e81ac; /* Frappe blue color */
+  color: #f7f7f8; /* Dark text color */
+  border-radius: 5px;
+  text-align: center;
 }
