@@ -85,8 +85,12 @@ export default function Sets() {
     setEnlargedSet(enlargedSet === setId ? null : setId);
   };
 
-  const startIndex = currentPage === 0 ? 0 : (currentPage - 1) * 4 + 3;
-  const paginatedSets = sets.slice(startIndex, startIndex + setsPerPage);
+  var startIndex = 0;
+  var paginatedSets;
+  if (sets !== null) {
+    startIndex = currentPage === 0 ? 0 : (currentPage - 1) * 4 + 3;
+    paginatedSets = sets.slice(startIndex, startIndex + setsPerPage);
+  }
 
   const nextPage = () => {
     if (startIndex + setsPerPage < sets.length) {
@@ -113,61 +117,81 @@ export default function Sets() {
     );
   }
 
-  return (
-    <div className="sets-page">
-      {loading && <LoadingOverlay message="Loading Quiz..." />}
-      <h2>Gatin</h2>
-      <div className="sets-list">
-        {currentPage === 0 && (
-          <div className="set-item static-card" onClick={() => navigate('/create-set')}>
-            <h3>Create New Set</h3>
-            <p>+</p>
-          </div>
-        )}
-        {paginatedSets.map((set) => (
-          validateSet(set) ? (
-            <div
-              key={set.id}
-              className={`set-item ${enlargedSet === set.id ? 'enlarged' : ''}`}
-              onMouseEnter={() => setHoveredSet(set.id)}
-              onMouseLeave={() => setHoveredSet(null)}
-              onClick={() => handleEnlarge(set.id)}
-            >
-              <h3>{set.title || 'Untitled'}</h3>
-              <p>{set.description || 'No description available'}</p>
-              {isEditing && (
-                <button
-                  className="delete-button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteSet(set.id);
-                  }}
-                >
-                  X
-                </button>
-              )}
-              {hoveredSet === set.id && !isEditing && (
-                <div className="set-buttons">
-                  <button onClick={() => handleGenerate('flashcards', set.id)}>View Flashcards</button>
-                  <button onClick={() => handleGenerate('quizzes', set.id)}>Generate Quiz</button>
-                  <button onClick={() => handleGenerate('matching', set.id)}>Generate Matching</button>
-                </div>
-              )}
+  if (sets !== null) {
+    return (
+      <div className="sets-page">
+        {loading && <LoadingOverlay message="Loading Quiz..." />}
+        <h2>Gatin</h2>
+        <div className="sets-list">
+          {currentPage === 0 && (
+            <div className="set-item static-card" onClick={() => navigate('/create-set')}>
+              <h3>Create New Set</h3>
+              <p>+</p>
             </div>
-          ) : null
-        ))}
-      </div>
-      <div className="pagination-buttons">
-        <button onClick={prevPage} disabled={currentPage === 0}>
-          Back
+          )}
+          {paginatedSets.map((set) => (
+            validateSet(set) ? (
+              <div
+                key={set.id}
+                className={`set-item ${enlargedSet === set.id ? 'enlarged' : ''}`}
+                onMouseEnter={() => setHoveredSet(set.id)}
+                onMouseLeave={() => setHoveredSet(null)}
+                onClick={() => handleEnlarge(set.id)}
+              >
+                <h3>{set.title || 'Untitled'}</h3>
+                <p>{set.description || 'No description available'}</p>
+                {isEditing && (
+                  <button
+                    className="delete-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteSet(set.id);
+                    }}
+                  >
+                    X
+                  </button>
+                )}
+                {hoveredSet === set.id && !isEditing && (
+                  <div className="set-buttons">
+                    <button onClick={() => handleGenerate('flashcards', set.id)}>View Flashcards</button>
+                    <button onClick={() => handleGenerate('quizzes', set.id)}>Generate Quiz</button>
+                    <button onClick={() => handleGenerate('matching', set.id)}>Generate Matching</button>
+                  </div>
+                )}
+              </div>
+            ) : null
+          ))}
+        </div>
+        <div className="pagination-buttons">
+          <button onClick={prevPage} disabled={currentPage === 0}>
+            Back
+          </button>
+          <button onClick={nextPage} disabled={startIndex + setsPerPage >= sets.length}>
+            Next
+          </button>
+        </div>
+        <button className="edit-button" onClick={toggleEditMode}>
+          {isEditing ? 'Stop Editing' : 'Edit Sets'}
         </button>
-        <button onClick={nextPage} disabled={startIndex + setsPerPage >= sets.length}>
-          Next
+      </div>
+    );
+  } else {
+    return (
+      <div className="sets-page">
+        {loading && <LoadingOverlay message="Loading Quiz..." />}
+        <h2>Gatin</h2>
+        <div className="sets-list">
+          {currentPage === 0 && (
+            <div className="set-item static-card" onClick={() => navigate('/create-set')}>
+              <h3>Create New Set</h3>
+              <p>+</p>
+            </div>
+          )}
+        </div>
+        <button className="edit-button" onClick={toggleEditMode}>
+          {isEditing ? 'Stop Editing' : 'Edit Sets'}
         </button>
       </div>
-      <button className="edit-button" onClick={toggleEditMode}>
-        {isEditing ? 'Stop Editing' : 'Edit Sets'}
-      </button>
-    </div>
-  );
+    );
+  }
 }
