@@ -119,12 +119,12 @@ const endpoints = {
   },
 
   deleteFlashcard: async (setId, flashcardId) => {
-    const response = await fetch(`${BASE_URL}/sets/flashcards?set=${setId}&id=${flashcardId}`, {
+    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}&id=${flashcardId}`, {
       method: 'DELETE',
       credentials: 'include',
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    return response.json();
+    return response;
   },
 
 };
