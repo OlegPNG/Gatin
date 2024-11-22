@@ -57,19 +57,28 @@ function Flashcards() {
     }
   };
 
-  const handleSaveFlashcard = async (index, field, value) => {
+  const handleEditFlashcard = async (index, field, value) => {
     const updatedFlashcards = [...flashcards];
     updatedFlashcards[index][field] = value;
     setFlashcards(updatedFlashcards);
 
-    try {
+    /*try {
       const setId = state.id;
       const updatedCard = updatedFlashcards[index];
       await endpoints.editFlashcard(setId, updatedCard);
     } catch (err) {
       setError(err.message);
-    }
+    }*/
   };
+
+  const handleSaveFlashcard = async (index) => {
+    try {
+      const updatedCard = flashcards[index];
+      await endpoints.editFlashcard(state.id, updatedCard);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
 
   if (error) return <div>Error: {error}</div>;
 
@@ -110,24 +119,25 @@ function Flashcards() {
                   <button
                     className="delete-button"
                     onClick={() => handleDeleteFlashcard(index)}
-                  >
-                    X
-                  </button>
+                  >Delete</button>
                 )}
                 {isEditing ? (
                   <>
                     <input
                       type="text"
                       value={card.front}
-                      onChange={(e) => handleSaveFlashcard(index, 'front', e.target.value)}
+                      onChange={(e) => handleEditFlashcard(index, 'front', e.target.value)}
                       placeholder="Front"
                     />
                     <input
                       type="text"
                       value={card.back}
-                      onChange={(e) => handleSaveFlashcard(index, 'back', e.target.value)}
+                      onChange={(e) => handleEditFlashcard(index, 'back', e.target.value)}
                       placeholder="Back"
                     />
+                    <button
+                      onClick={() => handleSaveFlashcard(index)}
+                    >Save</button>
                   </>
                 ) : (
                   <>
