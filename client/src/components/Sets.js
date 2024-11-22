@@ -189,7 +189,7 @@ export default function Sets() {
           )}
         </div>
         <button className="edit-button" onClick={toggleEditMode}>
-          {isEditing ? 'Stop Editing' : 'Edit Sets'}
+          {isEditing ? 'Stop Editing' : 'Delete Sets'}
         </button>
       </div>
     );
