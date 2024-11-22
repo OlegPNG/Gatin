@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navigation from './Navigation';
 import endpoints from '../services/endpoints.js';
 import '../styles/Flashcards.css';
@@ -9,10 +9,11 @@ function Flashcards() {
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const scrollRef = useRef();
 
   const { state } = useLocation();
 
-  // Fetch flashcards when the component mounts
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
@@ -29,18 +30,54 @@ function Flashcards() {
     fetchFlashcards();
   }, []);
 
-  if (error) return <div>Error: {error}</div>;
-
   const handleFlip = () => setFlipped(!flipped);
   const handleNext = () => setCurrentIndex((currentIndex + 1) % flashcards.length);
   const handleBack = () => setCurrentIndex((currentIndex - 1 + flashcards.length) % flashcards.length);
+
+  const handleEditToggle = () => setIsEditing(!isEditing);
+
+  const handleAddFlashcard = () => {
+    const newFlashcard = { front: '', back: '' };
+    setFlashcards((prev) => [...prev, newFlashcard]);
+    setTimeout(() => {
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleDeleteFlashcard = async (index) => {
+    try {
+      const setId = state.id;
+      const flashcardToDelete = flashcards[index];
+      if (flashcardToDelete.id) {
+        await endpoints.deleteFlashcard(setId, flashcardToDelete.id);
+      }
+      setFlashcards((prev) => prev.filter((_, i) => i !== index));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleSaveFlashcard = async (index, field, value) => {
+    const updatedFlashcards = [...flashcards];
+    updatedFlashcards[index][field] = value;
+    setFlashcards(updatedFlashcards);
+
+    try {
+      const setId = state.id;
+      const updatedCard = updatedFlashcards[index];
+      await endpoints.editFlashcard(setId, updatedCard);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="flashcards-page">
       <Navigation />
       <h1>Flashcards</h1>
 
-      {/* Main Flashcard Display */}
       <div className="flashcard-container">
         {flashcards[currentIndex] ? (
           <div className={`flashcard ${flipped ? 'flipped' : ''}`} onClick={handleFlip}>
@@ -58,18 +95,54 @@ function Flashcards() {
         </div>
       </div>
 
-      {/* Divider Line */}
-      <hr className="divider-line" />
-
-      {/* Scrollable List of Flashcards */}
-      <div className="scrollable-flashcards-container">
-        <div className="scrollable-flashcards">
-          {flashcards.map((card, index) => (
-            <div key={index} className="scrollable-flashcard">
-              <div className="scrollable-term">{card.front}</div>
-              <div className="scrollable-answer">{card.back}</div>
-            </div>
-          ))}
+      <div className="scrollable-section">
+        <hr className="divider-line" />
+        <div className="edit-toggle-container">
+          <button onClick={handleEditToggle}>
+            {isEditing ? 'Stop Editing' : 'Edit Flashcards'}
+          </button>
+        </div>
+        <div className="scrollable-flashcards-container" ref={scrollRef}>
+          <div className="scrollable-flashcards">
+            {flashcards.map((card, index) => (
+              <div key={index} className="scrollable-flashcard">
+                {isEditing && (
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteFlashcard(index)}
+                  >
+                    X
+                  </button>
+                )}
+                {isEditing ? (
+                  <>
+                    <input
+                      type="text"
+                      value={card.front}
+                      onChange={(e) => handleSaveFlashcard(index, 'front', e.target.value)}
+                      placeholder="Front"
+                    />
+                    <input
+                      type="text"
+                      value={card.back}
+                      onChange={(e) => handleSaveFlashcard(index, 'back', e.target.value)}
+                      placeholder="Back"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <div className="scrollable-term">{card.front}</div>
+                    <div className="scrollable-answer">{card.back}</div>
+                  </>
+                )}
+              </div>
+            ))}
+            {isEditing && (
+              <button className="add-flashcard-button" onClick={handleAddFlashcard}>
+                + Add Flashcard
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -4,6 +4,9 @@
   text-align: center;
   background-color: #2e3440; /* Frappe background color */
   color: #d8dee9; /* Light text color */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Main Flashcard Container */
@@ -91,24 +94,33 @@
 
 /* Divider Line */
 .divider-line {
-  margin: 20px 0;
+  margin-bottom: 10px;
   border: none;
   border-top: 2px solid #4c566a; /* Frappe border color */
 }
 
 /* Scrollable Flashcards Container */
 .scrollable-flashcards-container {
-  max-height: 300px;
-  overflow-y: auto;
+  margin-top: 0; /* Remove extra margin */
   padding: 10px;
-  border-top: 2px solid #4c566a; /* Frappe border color */
+  width: 1100px; /* Match width with main flashcard for consistency */
+  height: 500px; /* Match height to main flashcard */
+  overflow-y: auto; /* Enable scrolling if content exceeds container height */
+  background-color: #3b4252; /* Ensure consistent background color */
+  border-radius: 10px; /* Add rounded corners */
+  border: 2px solid #4c566a; /* Match border style */
 }
+
 
 /* Scrollable Flashcards Layout */
 .scrollable-flashcards {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.scrollable-flashcards .scrollable-flashcard:first-child {
+  margin-top: 0px;
 }
 
 /* Individual Scrollable Flashcard */
@@ -140,3 +152,70 @@
   border-radius: 5px;
   text-align: center;
 }
+
+.scrollable-section {
+  margin-top: 50px;
+}
+
+/* Edit Button */
+.edit-toggle-container {
+  text-align: center;
+  margin-bottom: 20px; /* Add some spacing to separate from flashcards */
+}
+
+.edit-toggle-container button {
+  padding: 10px 20px;
+  background-color: #5e81ac;
+  color: #eceff4;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-toggle-container button:hover {
+  background-color: #81a1c1;
+}
+
+.delete-small-x {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  color: #bf616a; /* Frappe red */
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+}
+
+.delete-small-x:hover {
+  color: #d08770; /* Hover color */
+}
+
+
+/* Add Flashcard Button */
+.add-flashcard-button {
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #5e81ac;
+  color: #eceff4;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-flashcard-button:hover {
+  background-color: #81a1c1;
+}
+
+.flashcard-container {
+  transition: opacity 0.5s ease, pointer-events 0.5s ease;
+}
+.scrollable-flashcards-container {
+  margin-top: 50px;
+  padding: 10px;
+}
+
