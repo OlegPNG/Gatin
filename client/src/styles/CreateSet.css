@@ -10,6 +10,15 @@
   color: #c6d0f5;
 }
 
+.create-set-page button {
+  background-color: var(--color-primary);
+}
+
+.create-set-page button:hover {
+  background-color: var(--color-text);
+}
+
+
 input[type='text'],
 textarea,
 button {
@@ -18,19 +27,19 @@ button {
   padding: 10px;
   font-size: 16px;
   color: #303446;
-  border: 2px solid #94e2d5;
   border-radius: 8px;
   background-color: #e6e9ef;
 }
 
 button {
-  background-color: #94e2d5;
+  background-color: var(--color-primary);
   color: #303446;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #81c8be;
+  background-color: var(--color-text);
+  color: var(--color-background);
 }
 
 .flashcard-toggle {
@@ -47,14 +56,16 @@ button:hover {
   font-size: 18px;
   border: none;
   border-radius: 5px;
-  background-color: #94e2d5;
+  background-color: var(--color-primary);
   color: #303446;
 }
 
 .flashcard-toggle button.active {
-  background-color: #81c8be;
+  background-color: var(--color-text);
+  color: var(--color-background);
   font-weight: bold;
 }
+
 
 input[type='file'] {
   margin: 20px 0;

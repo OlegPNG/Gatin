@@ -50,7 +50,7 @@
 
 .plus-icon {
   font-size: 3rem;
-  color: #94e2d5;
+  color: var(--color-primary);
 }
 
 .set-item.enlarged {
@@ -64,6 +64,15 @@
 
 .set-buttons {
   margin-top: 10px;
+}
+
+.set-buttons button {
+  background-color: var(--color-primary);
+}
+
+.set-buttons button:hover {
+  background-color: var(--color-text);
+  color: var(--color-background);
 }
 
 button {
@@ -86,6 +95,15 @@ button:hover {
   margin-top: 20px;
 }
 
+.pagination-buttons button {
+  background-color: var(--color-primary);
+}
+
+.pagination-buttons button:hover {
+  background-color: var(--color-text);
+  color: var(--color-background);
+}
+
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -95,7 +113,7 @@ button:disabled {
 .edit-button {
   padding: 10px 20px;
   font-size: 1rem;
-  background-color: var(--color-background);
+  background-color: var(--color-primary);
   color: #303446;
   border: none;
   border-radius: 5px;

@@ -565,6 +565,7 @@ func (s *State) SigninHandler(w http.ResponseWriter, r *http.Request) {
 		if err == sql.ErrNoRows {
 			w.WriteHeader(http.StatusUnauthorized)
 		} else {
+			log.Println("Signin error: " + err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 		return

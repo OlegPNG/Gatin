@@ -87,14 +87,14 @@ const endpoints = {
 
   // New Edit Flashcard API Call (POST request)
   editFlashcard: async (setId, data) => {
-    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}`, {
+    const response = await fetch(`${BASE_URL}/flashcards/edit?set=${setId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify(data),
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    return response.json();
+    return response;
   },
 
   // New Delete Flashcard API Call (DELETE request)
@@ -119,12 +119,12 @@ const endpoints = {
   },
 
   deleteFlashcard: async (setId, flashcardId) => {
-    const response = await fetch(`${BASE_URL}/sets/flashcards?set=${setId}&id=${flashcardId}`, {
+    const response = await fetch(`${BASE_URL}/flashcards?set=${setId}&id=${flashcardId}`, {
       method: 'DELETE',
       credentials: 'include',
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    return response.json();
+    return response;
   },
 
 };
