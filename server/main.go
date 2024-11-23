@@ -89,7 +89,7 @@ func main() {
 	r.Use(middleware.Logger)
 
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"https://www.gatin.dev", "https://localhost:3000", "http://localhost:3000", "http://127.0.0.1:3000"},
+		AllowedOrigins:   []string{"https://www.gatin.dev", "https://localhost:3000", "http://localhost:3000", "http://localhost:3001"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		AllowCredentials: true,
