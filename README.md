@@ -1,4 +1,4 @@
-Gatin is a ChatGPT powered studying tool made using GO and React. Upload your notes and have them automatically converted into flashcards. 
+Gatin is a ChatGPT powered studying tool made using GO and React. Upload your notes and have them automatically converted into flashcards. Visit the site at www.Gatin.dev
 
 
 ># Main Page
