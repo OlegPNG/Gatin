@@ -14,7 +14,7 @@ body {
   padding: 20px;
   width: 100%; /* Full width */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px; /* Space below the header */
+  margin-bottom: 20px; 
 }
 
 .matching-header h1 {

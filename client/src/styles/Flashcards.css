@@ -1,12 +1,39 @@
+/* Universal Reset */
+body, html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* Page Styling */
 .flashcards-page {
-  padding: 20px;
+  padding-top: 100px; /* Push content below the header */
   text-align: center;
   background-color: var(--color-background); /* Frappe background color */
   color: #d8dee9; /* Light text color */
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* Flashcards Header Styling */
+.flashcards-header {
+  background-color: var(--color-secondary);
+  color: var(--color-text); /* Text color */
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensure header is on top */
+}
+
+.flashcards-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: bold;
 }
 
 /* Main Flashcard Container */
@@ -111,7 +138,6 @@
   border: 2px solid #4c566a; /* Match border style */
 }
 
-
 /* Scrollable Flashcards Layout */
 .scrollable-flashcards {
   display: flex;
@@ -194,7 +220,6 @@
   color: #d08770; /* Hover color */
 }
 
-
 /* Add Flashcard Button */
 .add-flashcard-button {
   margin: 10px auto;
@@ -214,8 +239,8 @@
 .flashcard-container {
   transition: opacity 0.5s ease, pointer-events 0.5s ease;
 }
+
 .scrollable-flashcards-container {
   margin-top: 50px;
   padding: 10px;
 }
-
