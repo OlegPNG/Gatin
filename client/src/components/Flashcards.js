@@ -28,11 +28,13 @@ function Flashcards() {
       }
     };
     fetchFlashcards();
-  }, []);
+  }, [state]);
 
   const handleFlip = () => setFlipped(!flipped);
-  const handleNext = () => setCurrentIndex((currentIndex + 1) % flashcards.length);
-  const handleBack = () => setCurrentIndex((currentIndex - 1 + flashcards.length) % flashcards.length);
+  const handleNext = () =>
+    setCurrentIndex((currentIndex + 1) % flashcards.length);
+  const handleBack = () =>
+    setCurrentIndex((currentIndex - 1 + flashcards.length) % flashcards.length);
 
   const handleEditToggle = () => setIsEditing(!isEditing);
 
@@ -40,7 +42,10 @@ function Flashcards() {
     const newFlashcard = { front: '', back: '' };
     setFlashcards((prev) => [...prev, newFlashcard]);
     setTimeout(() => {
-      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
     }, 100);
   };
 
@@ -57,18 +62,10 @@ function Flashcards() {
     }
   };
 
-  const handleEditFlashcard = async (index, field, value) => {
+  const handleEditFlashcard = (index, field, value) => {
     const updatedFlashcards = [...flashcards];
     updatedFlashcards[index][field] = value;
     setFlashcards(updatedFlashcards);
-
-    /*try {
-      const setId = state.id;
-      const updatedCard = updatedFlashcards[index];
-      await endpoints.editFlashcard(setId, updatedCard);
-    } catch (err) {
-      setError(err.message);
-    }*/
   };
 
   const handleSaveFlashcard = async (index) => {
@@ -78,21 +75,33 @@ function Flashcards() {
     } catch (err) {
       setError(err.message);
     }
-  }
+  };
 
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="flashcards-page">
-      <Navigation />
-      <h1>Flashcards</h1>
+      {/* Header Section */}
+      <header className="flashcards-header">
+        <div className="navigation">
+          <Navigation />
+        </div>
+        <h1>Gatin</h1>
+      </header>
 
       <div className="flashcard-container">
         {flashcards[currentIndex] ? (
-          <div className={`flashcard ${flipped ? 'flipped' : ''}`} onClick={handleFlip}>
+          <div
+            className={`flashcard ${flipped ? 'flipped' : ''}`}
+            onClick={handleFlip}
+          >
             <div className="flashcard-inner">
-              <div className="flashcard-front">{flashcards[currentIndex].front}</div>
-              <div className="flashcard-back">{flashcards[currentIndex].back}</div>
+              <div className="flashcard-front">
+                {flashcards[currentIndex].front}
+              </div>
+              <div className="flashcard-back">
+                {flashcards[currentIndex].back}
+              </div>
             </div>
           </div>
         ) : (
@@ -119,25 +128,31 @@ function Flashcards() {
                   <button
                     className="delete-button"
                     onClick={() => handleDeleteFlashcard(index)}
-                  >Delete</button>
+                  >
+                    Delete
+                  </button>
                 )}
                 {isEditing ? (
                   <>
                     <input
                       type="text"
                       value={card.front}
-                      onChange={(e) => handleEditFlashcard(index, 'front', e.target.value)}
+                      onChange={(e) =>
+                        handleEditFlashcard(index, 'front', e.target.value)
+                      }
                       placeholder="Front"
                     />
                     <input
                       type="text"
                       value={card.back}
-                      onChange={(e) => handleEditFlashcard(index, 'back', e.target.value)}
+                      onChange={(e) =>
+                        handleEditFlashcard(index, 'back', e.target.value)
+                      }
                       placeholder="Back"
                     />
-                    <button
-                      onClick={() => handleSaveFlashcard(index)}
-                    >Save</button>
+                    <button onClick={() => handleSaveFlashcard(index)}>
+                      Save
+                    </button>
                   </>
                 ) : (
                   <>
@@ -148,7 +163,10 @@ function Flashcards() {
               </div>
             ))}
             {isEditing && (
-              <button className="add-flashcard-button" onClick={handleAddFlashcard}>
+              <button
+                className="add-flashcard-button"
+                onClick={handleAddFlashcard}
+              >
                 + Add Flashcard
               </button>
             )}

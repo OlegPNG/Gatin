@@ -1,24 +1,38 @@
-/* Frappe Catppuccin Theme for Quiz Page */
-.quiz-container {
-  background-color: var(--color-background);
-  color: #c6d0f5;
-  padding: 20px;
-  height: 100%;
-  display: flex;
-  flex-direction:column;
-  padding-left: 200px;
-  padding-right: 200px;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  min-height: 100vh;
-}
-
-.quiz-container h1 {
+/* Header Styling */
+.header {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
   text-align: center;
-  font-size: 2.5rem;
+  padding: 20px;
+  width: 100%; /* Full width */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  
 }
 
+/* Title Styling */
+.header-title {
+  margin: 0 ; /* Center-align the title */
+  font-size: 2.5rem;
+}
+
+/* Home Button Styling */
+.home-button {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: var(--color-text);
+  transform: scale(1.05);
+}
+
+/* Question Container Styling */
 .question-container {
   background-color: var(--color-background-alt);
   padding: 20px;
@@ -32,6 +46,7 @@
   margin-bottom: 20px;
 }
 
+/* Answers Container Styling */
 .answers-container {
   display: flex;
   flex-direction: column;
@@ -64,83 +79,17 @@
   color: #303446;
 }
 
+/* Feedback Styling */
 .feedback {
   text-align: center;
   font-size: 1.2rem;
-  color: #a6e3a1;
+  color: #f1f6f7;
   margin-top: 20px;
 }
 
+/* Button Disabled Styling */
 button:disabled {
   cursor: not-allowed;
   background-color: #b8c0d0;
   color: #303446;
-}
-
-button {
-  padding: 12px 20px;
-  background-color: #94e2d5;
-  color: #303446;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 20px;
-  font-size: 1.2rem;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #81c8be;
-}
-
-button:disabled {
-  background-color: #b8c0d0;
-  color: #303446;
-}
-
-.quiz-completion {
-  text-align: center;
-  font-size: 1.5rem;
-  color: #a6e3a1;
-  margin-top: 30px;
-}
-
-@media (max-width: 768px) {
-  .quiz-container {
-    padding: 15px;
-  }
-
-  .question-container {
-    padding: 15px;
-  }
-
-  .answer-button {
-    font-size: 1rem;
-  }
-}
-
-.expand-arrow {
-  background: none;
-  border: none;
-  color: var(--color-primary);
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.study-options {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.home-button {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  padding: 10px 20px;
-  background-color: var(--color-primary);
-  color: var(--color-background);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }

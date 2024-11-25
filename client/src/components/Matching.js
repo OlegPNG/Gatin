@@ -5,31 +5,29 @@ import '../styles/Matching.css';
 import { useLocation } from 'react-router-dom';
 
 function Matching() {
-  const [flashcards, setFlashcards] = useState([]);
-  const [error, setError] = useState(null);
-
-  const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState([]);
-
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const [matchedPairs, setMatchedPairs] = useState([]);
-
+  const [fullFlashcards, setFullFlashcards] = useState([]); // All flashcards
+  const [flashcards, setFlashcards] = useState([]); // Current 10 flashcards in play
+  const [shuffledCards, setShuffledCards] = useState([]); // Combined and shuffled
+  const [selectedCard, setSelectedCard] = useState(null); // Track selected question or answer
+  const [matchedPairs, setMatchedPairs] = useState([]); // Successfully matched pairs
+  const [error, setError] = useState(null); // Error handling
   const [showModal, setShowModal] = useState(false); // Track modal visibility
 
   const { state } = useLocation();
 
+  // Fetch flashcards from the API and store the full dataset
   useEffect(() => {
     const fetchFlashcards = async () => {
       try {
         const setId = state.id;
         const data = await endpoints.getFlashcardsBySetId(setId);
         const object = await data.json();
-        const fc = object.flashcards.map((card) => ({
-          front: card.front.trim().toLowerCase(),
-          back: card.back.trim().toLowerCase(),
+        const allFlashcards = object.flashcards.map((card) => ({
+          front: card.front.trim(),
+          back: card.back.trim(),
         }));
-        setFlashcards(fc);
-        initializeGame(fc);
+        setFullFlashcards(allFlashcards); // Store the full set of flashcards
+        selectRandomFlashcards(allFlashcards); // Select the initial 10 flashcards
       } catch (err) {
         setError(err.message);
       }
@@ -37,48 +35,86 @@ function Matching() {
     fetchFlashcards();
   }, [state]);
 
-  const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
+  // Helper function to shuffle an array
+  const shuffleArray = (array) => {
+    return [...array].sort(() => Math.random() - 0.5);
+  };
 
+  // Helper function for double shuffle to avoid adjacency
+  const enhancedShuffle = (array) => {
+    let shuffled = shuffleArray(array);
+
+    // Perform another pass to further randomize pair positions
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled;
+  };
+
+  // Select 10 random flashcards from the full dataset
+  const selectRandomFlashcards = (allFlashcards) => {
+    const selected = shuffleArray(allFlashcards).slice(0, 10); // Pick a random 10
+    setFlashcards(selected); // Set the current flashcards
+    initializeGame(selected); // Initialize the game with these cards
+  };
+
+  // Initialize the game with the provided flashcards
   const initializeGame = (fc) => {
-    const shuffledQuestions = shuffleArray(fc.map((card) => card.front));
-    const shuffledAnswers = shuffleArray(fc.map((card) => card.back));
+    const combined = fc
+      .map((card) => [
+        { text: card.front, type: 'question' },
+        { text: card.back, type: 'answer' },
+      ])
+      .flat();
+    const shuffled = enhancedShuffle(combined); // Use enhanced shuffle
 
-    setQuestions(shuffledQuestions);
-    setAnswers(shuffledAnswers);
-    setMatchedPairs([]);
-    setSelectedQuestion(null);
-    setShowModal(false); // Hide the modal when resetting the game
+    setShuffledCards(shuffled);
+    setMatchedPairs([]); // Reset matched pairs
+    setSelectedCard(null); // Reset selected card
+    setShowModal(false); // Hide modal on game start/reset
   };
 
-  const handleQuestionClick = (question) => {
-    setSelectedQuestion(question);
-  };
-
-  const handleAnswerClick = (answer) => {
-    if (selectedQuestion) {
+  // Handle clicking a card
+  const handleCardClick = (card) => {
+    if (!selectedCard) {
+      // No card selected, select this card
+      setSelectedCard(card);
+    } else if (selectedCard && selectedCard.type !== card.type) {
+      // If the selected card and clicked card are of different types
       const matchedCard = flashcards.find(
-        (card) =>
-          card.front === selectedQuestion && card.back === answer
+        (fc) =>
+          (fc.front === selectedCard.text && fc.back === card.text) ||
+          (fc.back === selectedCard.text && fc.front === card.text)
       );
 
       if (matchedCard) {
+        // Add the matched pair
         setMatchedPairs((prev) => [...prev, matchedCard]);
-        setQuestions((prev) => prev.filter((q) => q !== selectedQuestion));
-        setAnswers((prev) => prev.filter((a) => a !== answer));
+        // Remove matched cards from the grid
+        setShuffledCards((prev) =>
+          prev.filter((c) => c.text !== selectedCard.text && c.text !== card.text)
+        );
 
         // Check if the game is complete
         if (matchedPairs.length + 1 === flashcards.length) {
-          setTimeout(() => setShowModal(true), 300); // Delay to show the modal
+          setTimeout(() => setShowModal(true), 300); // Delay modal display
         }
       }
-      setSelectedQuestion(null);
+      setSelectedCard(null); // Reset selection after a match attempt
+    } else {
+      // Same type selected, reset the selection
+      setSelectedCard(null);
     }
   };
 
+  // Reset the game with a new random selection of flashcards
   const resetGame = () => {
-    initializeGame(flashcards);
+    selectRandomFlashcards(fullFlashcards); // Pick new random cards and reset
   };
 
+  // Error rendering
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -94,26 +130,22 @@ function Matching() {
       {/* Matching Game Container */}
       <div className="matching-container">
         <div className="matching-grid">
-          {questions.map((question, index) => (
+          {shuffledCards.map((card, index) => (
             <div
-              key={`question-${index}`}
+              key={index}
               className={`matching-tile ${
-                selectedQuestion === question ? 'selected' : ''
+                selectedCard?.text === card.text ? 'selected' : ''
+              } ${
+                matchedPairs.some(
+                  (pair) =>
+                    pair.front === card.text || pair.back === card.text
+                )
+                  ? 'matched'
+                  : ''
               }`}
-              onClick={() => handleQuestionClick(question)}
+              onClick={() => handleCardClick(card)}
             >
-              {question}
-            </div>
-          ))}
-          {answers.map((answer, index) => (
-            <div
-              key={`answer-${index}`}
-              className={`matching-tile ${
-                matchedPairs.some((pair) => pair.back === answer) ? 'matched' : ''
-              }`}
-              onClick={() => handleAnswerClick(answer)}
-            >
-              {answer}
+              {card.text}
             </div>
           ))}
         </div>
