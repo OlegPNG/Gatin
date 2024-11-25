@@ -6,7 +6,7 @@
   padding: 20px;
   width: 100%; /* Full width */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 /* Title Styling */
@@ -83,7 +83,7 @@
 .feedback {
   text-align: center;
   font-size: 1.2rem;
-  color: #a6e3a1;
+  color: #f1f6f7;
   margin-top: 20px;
 }
 
